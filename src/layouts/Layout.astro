@@ -1,0 +1,28 @@
+---
+import '../styles/global.css';
+
+import {
+  getMetaTagsAndIconLinks,
+  getFontLinks,
+  getIconLinks,
+  getComponentChunkLinks,
+  getLoaderScript
+} from '@porsche-design-system/components-js/partials';
+
+const { title = 'AHD Paddle' } = Astro.props;
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>{title}</title>
+    <Fragment set:html={getMetaTagsAndIconLinks({ appTitle: title })} />
+    <Fragment set:html={getFontLinks()} />
+    <Fragment set:html={getIconLinks()} />
+    <Fragment set:html={getComponentChunkLinks()} />
+  </head>
+  <body>
+    <slot />
+    <Fragment set:html={getLoaderScript()} />
+  </body>
+</html>
