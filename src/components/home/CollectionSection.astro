@@ -1,0 +1,69 @@
+---
+interface Board {
+  name: string;
+  description: string;
+  price: string;
+  image: string;
+  discipline: string;
+}
+
+interface Props {
+  lineup: Board[];
+}
+
+const { lineup } = Astro.props;
+---
+
+<!-- Sélection de planches best-sellers -->
+<section id="gamme" class="py-24 md:py-32 bg-gradient-to-b from-midnight to-manta/80" data-bg="#020714" data-nav="dark">
+  <div class="container flex flex-col gap-12">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+      <div>
+        <span class="section-eyebrow">Collection 2026</span>
+        <h2 class="section-title mt-4">Boards iconiques AHD</h2>
+      </div>
+      <p class="max-w-xl text-foam/70 text-base md:text-lg">
+        Retrouvez les planches qui ont façonné notre histoire à travers des vitrines immersives grand format, pensées pour ressentir l’ADN de chaque shape.
+      </p>
+    </div>
+
+    <div class="grid gap-8 md:grid-cols-2">
+      {lineup.map((model) => (
+        <a
+          href="#"
+          class="group relative isolate aspect-[4/5] min-h-[420px] overflow-hidden rounded-[2.5rem] bg-midnight shadow-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+        >
+          <div class="absolute inset-0">
+            <div class="absolute inset-0 flex items-center justify-center p-10 sm:p-12">
+              <img
+                src={model.image}
+                alt={model.name}
+                loading="lazy"
+                class="h-full max-h-[72%] w-auto object-contain drop-shadow-[0_45px_90px_rgba(0,0,0,0.55)] transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-b from-midnight/10 via-midnight/40 to-midnight/90 opacity-90 transition-opacity duration-300 group-hover:opacity-100"></div>
+          </div>
+          <div class="absolute inset-0 flex flex-col justify-between p-7 sm:p-8 text-white">
+            <div class="flex items-start justify-center">
+              <h3 class="text-3xl sm:text-4xl font-semibold tracking-[0.3em] uppercase text-center">
+                {model.name}
+              </h3>
+            </div>
+            <div class="flex items-end justify-between gap-6">
+              <div class="space-y-3 text-left text-white/85">
+                <p class="text-sm leading-relaxed">
+                  {model.description}
+                </p>
+                <span class="text-sm font-semibold text-white">{model.price}</span>
+              </div>
+              <span aria-hidden="true" class="text-3xl text-white/90 transition-transform duration-300 group-hover:translate-x-1">
+                &rarr;
+              </span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

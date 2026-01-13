@@ -1,0 +1,11 @@
+---
+interface Props {
+  variant?: 'dark-to-light' | 'light-to-dark';
+}
+
+const { variant = 'dark-to-light' } = Astro.props;
+const variantClass = variant === 'light-to-dark' ? 'fade-light-to-dark' : 'fade-dark-to-light';
+---
+
+<!-- Transition visuelle entre deux sections -->
+<div class={`section-fade ${variantClass}`}></div>

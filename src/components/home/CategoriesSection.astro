@@ -1,0 +1,54 @@
+---
+interface Category {
+  title: string;
+  description: string;
+  image: string;
+  link: string;
+}
+
+interface Props {
+  categories: Category[];
+}
+
+const { categories } = Astro.props;
+---
+
+<!-- Vitrine des disciplines AHD -->
+<section id="univers" class="py-16" data-bg="#ffffff" data-nav="light">
+  <div class="container space-y-8 text-midnight">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div>
+        <span class="section-eyebrow text-gold">Univers AHD</span>
+        <h2 class="section-title mt-4">Choisissez votre discipline.</h2>
+      </div>
+      <p class="max-w-xl text-midnight/70 text-base md:text-lg">
+        Des planches iconiques, des foils dernière génération et tous les accessoires qui font la différence sur l’eau.
+      </p>
+    </div>
+
+    <div class="relative">
+      <div class="flex flex-col gap-6 overflow-visible pb-6 lg:flex-row lg:items-stretch lg:justify-center lg:gap-8">
+        {categories.map((category) => (
+          <a
+            href={category.link}
+            class="group relative w-full max-w-[420px] snap-start overflow-hidden rounded-[2.25rem] aspect-[4/5] bg-midnight/80 shadow-[0_24px_60px_rgba(15,23,42,0.25)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold lg:min-w-[360px]"
+          >
+            <img
+              src={category.image}
+              alt={category.title}
+              loading="lazy"
+              class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/35 to-black/80 opacity-95 transition-opacity duration-300 group-hover:opacity-100"></div>
+            <div class="absolute inset-0 flex items-end justify-between p-7 text-white">
+              <h3 class="text-2xl sm:text-3xl font-semibold tracking-tight">{category.title}</h3>
+              <span aria-hidden="true" class="text-2xl sm:text-3xl text-white/90 transition-transform duration-300 group-hover:translate-x-1">
+                &rarr;
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

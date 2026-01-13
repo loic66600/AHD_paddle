@@ -1,0 +1,54 @@
+---
+interface Experience {
+  title: string;
+  copy: string;
+  image: string;
+}
+
+interface Props {
+  experiences: Experience[];
+}
+
+const { experiences } = Astro.props;
+---
+
+<!-- Mise en avant des programmes et services -->
+<section id="decouvrir" class="py-24 md:py-32 bg-gradient-to-b from-manta/70 to-midnight" data-bg="#02101f" data-nav="dark">
+  <div class="container space-y-10">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+      <div>
+        <span class="section-eyebrow">Découvrir</span>
+        <h2 class="section-title mt-4">Vivez l’expérience AHD</h2>
+      </div>
+      <p class="max-w-xl text-foam/70 text-base md:text-lg">
+        Sélectionnez un programme, un atelier ou un service skipper et laissez-nous orchestrer votre prochaine session haute performance.
+      </p>
+    </div>
+
+    <div class="grid gap-6 md:gap-8 md:grid-cols-3">
+      {experiences.map((experience) => (
+        <article class="group relative overflow-hidden rounded-[2.5rem] aspect-[4/5]">
+          <img
+            src={experience.image}
+            alt={experience.title}
+            loading="lazy"
+            class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent"></div>
+          <div class="absolute inset-x-0 bottom-0 p-7 sm:p-8">
+            <div class="space-y-2 text-white">
+              <h3 class="text-2xl font-semibold">{experience.title}</h3>
+              <p class="text-sm text-white/80 leading-relaxed">
+                {experience.copy}
+              </p>
+            </div>
+            <div class="mt-6 flex items-center justify-between text-white/80">
+              <span class="text-xs uppercase tracking-[0.4em]">Découvrir</span>
+              <span aria-hidden="true" class="text-2xl">&rarr;</span>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

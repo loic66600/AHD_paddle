@@ -1,0 +1,125 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const hero = {
+  title: 'Wingfoil',
+  subtitle: 'Des set-ups légers et précis pour décoller dès 10 nœuds.',
+  image: '/images/ahd-pulse.jpg'
+};
+
+const facets = [
+  {
+    label: 'Taille',
+    options: ['60 L', '75 L', '88 L', '100 L']
+  },
+  {
+    label: 'Couleur',
+    options: ['Lagoon Blue', 'Graphite', 'Signal Orange']
+  },
+  {
+    label: 'Prix',
+    options: ['-700 €', '700 € - 950 €', '+950 €']
+  }
+];
+
+const boards = [
+  {
+    name: 'Compact Foil',
+    description: 'Prise en main immédiate, parfaite pour progresser en wing foil.',
+    volume: '75 L',
+    price: '899 €',
+    image: '/images/boards/ahd-compact-foil.png'
+  },
+  {
+    name: 'Fury Wing',
+    description: 'Carène tendue et rails affutés pour les riders à la recherche de vitesse.',
+    volume: '88 L',
+    price: '999 €',
+    image: '/images/boards/ahd-fury.png'
+  },
+  {
+    name: 'U-Surf Foil',
+    description: 'Hyper compacte, elle maximise la maniabilité dans les vagues.',
+    volume: '60 L',
+    price: '949 €',
+    image: '/images/boards/ahd-zen.png'
+  },
+  {
+    name: 'Sky Rider',
+    description: 'Stabilité longitudinale accrue pour décoller tôt et rester en vol.',
+    volume: '100 L',
+    price: '975 €',
+    image: '/images/boards/ahd-compact-foil.png'
+  }
+];
+---
+
+<Layout title="AHD Paddle | Wingfoil">
+  <main class="space-y-24 pb-24">
+    <section
+      class="relative flex min-h-[70vh] items-center justify-center overflow-hidden text-center"
+      data-bg="#010104"
+      style={`background-image: url('${hero.image}'); background-size: cover; background-position: center;`}
+    >
+      <div class="absolute inset-0 bg-midnight/60"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-midnight/0 via-midnight/40 to-midnight/80"></div>
+      <div class="relative z-10 max-w-2xl space-y-6 px-6">
+        <p class="text-sm uppercase tracking-[0.4em] text-foam/70">Collection 2026</p>
+        <h1 class="text-4xl md:text-6xl font-black text-white">{hero.title}</h1>
+        <p class="text-base md:text-lg text-foam/80">{hero.subtitle}</p>
+      </div>
+    </section>
+
+    <section class="container space-y-10 text-midnight" data-bg="#ffffff" data-nav="light">
+      <div class="space-y-6 text-center">
+        <h2 class="section-title text-3xl md:text-4xl">Planches wingfoil</h2>
+        <p class="mx-auto max-w-3xl text-base md:text-lg text-midnight/70">
+          Nouveaux shapes ultra compacts, foils carbone dernière génération et constructions légères pour dominer les
+          downwinds comme les sessions freestyle. Filtrez par taille, couleur et tarif pour composer votre set-up.
+        </p>
+      </div>
+
+      <details class="w-full max-w-4xl rounded-3xl border border-midnight/5 bg-white/60">
+        <summary class="group flex w-fit items-center gap-2 cursor-pointer rounded-full border border-transparent bg-white/80 px-5 py-2 text-xs uppercase tracking-[0.35em] text-midnight/60 transition-colors duration-200 list-none">
+          <span class="font-semibold text-midnight/70">Filtre</span>
+        </summary>
+        <div class="px-6 pb-6 pt-4 grid gap-6 md:grid-cols-3">
+          {facets.map((facet) => (
+            <div class="space-y-4" aria-label={`Filtre ${facet.label}`}>
+              <p class="text-xs uppercase tracking-[0.3em] text-midnight/60">{facet.label}</p>
+              <ul class="space-y-2 text-sm text-midnight/80">
+                {facet.options.map((option) => (
+                  <li class="flex items-center gap-3">
+                    <input type="checkbox" id={`${facet.label}-${option}`} name={facet.label} value={option} class="h-4 w-4 rounded border-midnight/30 text-midnight focus:ring-midnight" />
+                    <label for={`${facet.label}-${option}`}>{option}</label>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </details>
+
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        {boards.map((board) => (
+          <article class="group flex flex-col overflow-hidden rounded-[2.5rem] bg-white shadow-[0_24px_60px_rgba(15,23,42,0.15)] transition-transform duration-300 hover:-translate-y-2">
+            <div class="flex h-72 items-center justify-center bg-gradient-to-b from-midnight/10 via-midnight/5 to-white">
+              <img src={board.image} alt={board.name} loading="lazy" class="h-full max-h-[85%] w-auto object-contain" />
+            </div>
+            <div class="space-y-3 px-6 py-6 text-left">
+              <h3 class="text-xl font-semibold text-midnight">{board.name}</h3>
+              <p class="text-sm text-midnight/70">{board.description}</p>
+              <div class="flex items-center justify-between text-sm">
+                <span class="font-semibold text-midnight">{board.price}</span>
+                <span class="text-midnight/60">{board.volume}</span>
+              </div>
+              <button class="mt-4 inline-flex items-center justify-center rounded-full border border-midnight/20 px-4 py-2 text-xs uppercase tracking-[0.3em] text-midnight/70 transition-colors duration-200 hover:border-midnight hover:text-midnight">
+                Voir la fiche
+              </button>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  </main>
+</Layout>

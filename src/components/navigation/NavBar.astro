@@ -1,0 +1,31 @@
+<!-- Navigation principale avec menu fixe -->
+<header
+  id="ahd-global-nav"
+  class="nav-dark fixed inset-x-0 top-0 z-40 grid grid-cols-[auto_1fr_auto] items-center gap-4 px-6 py-5 md:px-12"
+>
+  <button
+    id="ahd-menu-button"
+    class="nav-trigger text-sm uppercase tracking-[0.35em] focus:outline-none"
+    aria-controls="ahd-drawer"
+    aria-expanded="false"
+  >
+    Menu
+  </button>
+  <a href="/" class="nav-brand flex flex-col items-center gap-3 justify-self-center focus:outline-none">
+    <img id="ahd-nav-logo" src="/images/logo_blanc.png" alt="AHD" class="nav-logo h-9 w-auto" loading="lazy" />
+    <p class="nav-tagline text-xs uppercase tracking-[0.5em]">AHD Paddle Division</p>
+  </a>
+  <div class="w-16"></div>
+</header>
+
+<div
+  id="ahd-drawer"
+  class="fixed inset-y-0 left-0 z-50 w-72 max-w-xs -translate-x-full transform bg-midnight/95 px-8 py-12 transition-transform duration-500 will-change-transform"
+>
+  <nav class="flex flex-col gap-8 text-sm uppercase tracking-[0.35em] text-foam/80">
+    <a href="/#univers">&gt; Univers AHD</a>
+    <a href="/#gamme">Collection</a>
+    <a href="/#histoire">Histoire</a>
+    <a href="/#decouvrir">Découvrir</a>
+  </nav>
+</div>

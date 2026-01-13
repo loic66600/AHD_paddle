@@ -1,0 +1,37 @@
+---
+interface Props {
+  ctaLabel: string;
+}
+
+const { ctaLabel } = Astro.props;
+---
+
+<!-- Hero immersif contrôlé depuis la page d'accueil -->
+<section class="relative h-[95vh] min-h-[640px]" data-bg="#010104" data-nav="dark">
+  <video
+    class="absolute inset-0 h-full w-full object-cover"
+    src="/media/ahd-hero.mp4"
+    autoplay
+    loop
+    muted
+    playsinline
+  ></video>
+  <div class="absolute inset-0 bg-gradient-to-r from-midnight/50 via-manta/40 to-lagoon/35"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,#1c4b67_0%,transparent_55%)] opacity-50"></div>
+
+  <div class="relative z-10 flex h-full flex-col justify-center container pt-28 md:pt-36">
+    <h1 class="section-title text-4xl md:text-6xl xl:text-7xl max-w-3xl leading-tight text-white">
+      L’esprit AHD transposé sur l’eau.
+    </h1>
+    <div class="mt-10 flex flex-col sm:flex-row gap-4">
+      <p-button
+        variant="secondary"
+        size="large"
+        class="hero-cta"
+        style="--p-button-color: #ffffff; --p-button-background-color: rgba(255,255,255,0.15); --p-button-border-color: rgba(255,255,255,0.85);"
+      >
+        {ctaLabel}
+      </p-button>
+    </div>
+  </div>
+</section>
