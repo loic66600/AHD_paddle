@@ -4,12 +4,14 @@ import '../styles/global.css';
 import NavBar from '../components/navigation/NavBar.astro';
 import Footer from '../components/Footer.astro';
 
-import {
+import partials from '@porsche-design-system/components-js/partials/index.js';
+
+const {
   getMetaTagsAndIconLinks,
   getFontLinks,
   getComponentChunkLinks,
   getLoaderScript
-} from '@porsche-design-system/components-js/partials';
+} = partials;
 
 const { title = 'AHD Paddle' } = Astro.props;
 ---
