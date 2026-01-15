@@ -4,10 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev --port 4321 --host",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "build": "astro build" 
   },
   "dependencies": {
     "@astrojs/tailwind": "5.0.3",
