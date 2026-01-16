@@ -25,14 +25,14 @@ const { experiences } = Astro.props;
       </p>
     </div>
 
-    <div class="grid gap-6 md:gap-8 md:grid-cols-3">
+    <div class="flex flex-col items-center gap-6 sm:gap-8 overflow-visible pb-6 lg:flex-row lg:flex-wrap lg:items-stretch lg:justify-center lg:gap-8 lg:pb-0">
       {experiences.map((experience) => (
-        <article class="group relative overflow-hidden rounded-[2.5rem] aspect-[4/5]">
+        <article class="group relative w-full max-w-[520px] overflow-hidden rounded-[2.75rem] aspect-[3/4] min-h-[440px] sm:max-w-[600px] mx-auto lg:mx-0 lg:max-w-[360px] lg:aspect-[4/5] lg:min-h-0 lg:rounded-[2.5rem]">
           <img
             src={experience.image}
             alt={experience.title}
             loading="lazy"
-            class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent"></div>
           <div class="absolute inset-x-0 bottom-0 p-7 sm:p-8">

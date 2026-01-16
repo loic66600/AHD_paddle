@@ -63,9 +63,9 @@ const boards = [
       data-nav="dark"
       style={`background-image: url('${hero.image}'); background-size: cover; background-position: center;`}
     >
-      <div class="absolute inset-0 bg-midnight/60"></div>
-      <div class="absolute inset-0 bg-gradient-to-b from-midnight/0 via-midnight/40 to-midnight/80"></div>
-      <div class="relative z-10 max-w-2xl space-y-6 px-6">
+      <div class="absolute inset-0 bg-white/12"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-midnight/65"></div>
+      <div class="relative z-10 max-w-2xl space-y-6 px-6 hero-copy-shadow">
         <p class="text-sm uppercase tracking-[0.4em] text-foam/70">Collection 2026</p>
         <h1 class="text-4xl md:text-6xl font-black text-white">{hero.title}</h1>
         <p class="text-base md:text-lg text-foam/80">{hero.subtitle}</p>
@@ -103,11 +103,11 @@ const boards = [
           </div>
         </details>
 
-        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-col items-center gap-8 sm:gap-10 lg:flex-row lg:flex-wrap lg:items-stretch lg:justify-center lg:gap-8">
           {boards.map((board) => (
-            <article class="group flex flex-col overflow-hidden rounded-[2.5rem] bg-white shadow-[0_24px_60px_rgba(15,23,42,0.15)] transition-transform duration-300 hover:-translate-y-2">
-              <div class="flex h-72 items-center justify-center bg-gradient-to-b from-midnight/10 via-midnight/5 to-white">
-                <img src={board.image} alt={board.name} loading="lazy" class="h-full max-h-[85%] w-auto object-contain" />
+            <article class="group flex w-full max-w-[520px] flex-col overflow-hidden rounded-[2.75rem] bg-white shadow-[0_24px_60px_rgba(15,23,42,0.15)] transition-transform duration-300 hover:-translate-y-2 sm:max-w-[600px] mx-auto lg:mx-0 lg:max-w-[360px] lg:rounded-[2.5rem]">
+              <div class="relative w-full aspect-[3/4] overflow-hidden bg-gradient-to-b from-midnight/10 via-midnight/5 to-white lg:aspect-[4/5]">
+                <img src={board.image} alt={board.name} loading="lazy" class="absolute inset-0 h-full w-full object-contain transition-transform duration-500 group-hover:scale-105" />
               </div>
               <div class="space-y-3 px-6 py-6 text-left">
                 <h3 class="text-xl font-semibold text-midnight">{board.name}</h3>

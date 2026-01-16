@@ -27,11 +27,11 @@ const { lineup } = Astro.props;
       </p>
     </div>
 
-    <div class="grid gap-8 md:grid-cols-2">
+    <div class="flex flex-col items-center gap-8 sm:gap-10 overflow-visible pb-8 lg:flex-row lg:flex-wrap lg:items-stretch lg:justify-center lg:gap-8 lg:pb-6">
       {lineup.map((model) => (
         <a
           href="#"
-          class="group relative isolate aspect-[4/5] min-h-[420px] overflow-hidden rounded-[2.5rem] bg-midnight shadow-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+          class="group relative isolate w-full max-w-[520px] aspect-[3/4] min-h-[460px] overflow-hidden rounded-[2.75rem] bg-midnight shadow-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold sm:max-w-[600px] mx-auto lg:mx-0 lg:max-w-[360px] lg:aspect-[4/5] lg:min-h-[420px] lg:rounded-[2.5rem]"
         >
           <div class="absolute inset-0">
             <div class="absolute inset-0 flex items-center justify-center p-10 sm:p-12">
@@ -39,7 +39,7 @@ const { lineup } = Astro.props;
                 src={model.image}
                 alt={model.name}
                 loading="lazy"
-                class="h-full max-h-[72%] w-auto object-contain drop-shadow-[0_45px_90px_rgba(0,0,0,0.55)] transition-transform duration-500 group-hover:scale-105"
+                class="h-full max-h-[80%] w-auto object-contain drop-shadow-[0_45px_90px_rgba(0,0,0,0.55)] transition-transform duration-500 group-hover:scale-110 lg:max-h-[72%]"
               />
             </div>
             <div class="absolute inset-0 bg-gradient-to-b from-midnight/10 via-midnight/40 to-midnight/90 opacity-90 transition-opacity duration-300 group-hover:opacity-100"></div>

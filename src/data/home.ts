@@ -18,8 +18,8 @@ export const categories = [
   {
     title: 'Accessoires',
     description: 'Pads, housses, voiles signature et lignes carbone pour compléter votre setup AHD.',
-    image: withBase('/images/category-accessoires.jpg'),
-    link: '#'
+    image: withBase('/images/category-%20accesoires.png'),
+    link: withBase('/accessoires')
   }
 ];
 
@@ -63,7 +63,7 @@ export const experiences = [
   {
     title: 'Atelier Sur Mesure',
     copy: 'Accédez aux designers AHD pour personnaliser vos pads, vos rails ou votre finition carbone, directement depuis notre atelier vendéen.',
-    image: withBase('/images/category-accessoires.jpg')
+    image: withBase('/images/category-%20accesoires.png')
   },
   {
     title: 'Services Skipper',
