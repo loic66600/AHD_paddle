@@ -14,14 +14,24 @@ const { categories } = Astro.props;
 ---
 
 <!-- Vitrine des disciplines AHD -->
-<section id="univers" class="py-16" data-bg="#ffffff" data-nav="light">
-  <div class="container space-y-8 text-midnight">
+<section
+  id="univers"
+  class="tint-section univers-section py-16"
+  data-bg="#ffffff"
+  data-bg-delay="300"
+  data-bg-initial="#010104"
+  data-nav="light"
+  data-nav-initial="dark"
+  data-nav-delay="300"
+  data-local-light="300"
+>
+  <div class="container space-y-8">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
       <div>
         <span class="section-eyebrow text-gold">Univers AHD</span>
-        <h2 class="section-title mt-4">Choisissez votre discipline.</h2>
+        <h2 class="section-title mt-4 tint-section__title">Choisissez votre discipline.</h2>
       </div>
-      <p class="max-w-xl text-midnight/70 text-base md:text-lg">
+      <p class="tint-section__copy max-w-xl text-base md:text-lg">
         Des planches iconiques, des foils dernière génération et tous les accessoires qui font la différence sur l’eau.
       </p>
     </div>
@@ -52,3 +62,51 @@ const { categories } = Astro.props;
     </div>
   </div>
 </section>
+
+<script type="module">
+  const sections = document.querySelectorAll('[data-local-light]');
+
+  const parseDelay = (value, fallback = 0) => {
+    const parsed = Number.parseInt(value ?? '', 10);
+    return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
+  };
+
+  sections.forEach((section) => {
+    const className = section.getAttribute('data-local-class') || 'is-light';
+    const delay = parseDelay(section.getAttribute('data-local-light'), parseDelay(section.getAttribute('data-bg-delay'), 0));
+    const thresholdAttr = section.getAttribute('data-local-threshold');
+    const thresholdRaw = Number.parseFloat(thresholdAttr ?? '');
+    const threshold = Number.isFinite(thresholdRaw) ? thresholdRaw : 0.45;
+    let timerId = 0;
+
+    const enter = () => {
+      window.clearTimeout(timerId);
+      timerId = window.setTimeout(() => {
+        section.classList.add(className);
+      }, delay);
+    };
+
+    const leave = () => {
+      window.clearTimeout(timerId);
+      section.classList.remove(className);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.target !== section) {
+            return;
+          }
+          if (entry.isIntersecting) {
+            enter();
+          } else {
+            leave();
+          }
+        });
+      },
+      { threshold }
+    );
+
+    observer.observe(section);
+  });
+</script>

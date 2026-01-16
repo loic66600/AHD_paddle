@@ -14,6 +14,38 @@ body {
 	transition: background-color 700ms ease;
 }
 
+.tint-section {
+	@apply bg-midnight text-foam transition-colors duration-500;
+}
+
+.tint-section.is-light {
+	@apply bg-white text-midnight;
+}
+
+.tint-section__title {
+	@apply text-foam transition-colors duration-500;
+}
+
+.tint-section.is-light .tint-section__title {
+	@apply text-midnight;
+}
+
+.tint-section__copy {
+	@apply text-foam/80 transition-colors duration-500;
+}
+
+.tint-section.is-light .tint-section__copy {
+	@apply text-midnight/80;
+}
+
+.tint-section__eyebrow {
+	@apply text-foam/70 transition-colors duration-500;
+}
+
+.tint-section.is-light .tint-section__eyebrow {
+	@apply text-midnight/60;
+}
+
 a {
 	@apply text-foam hover:text-gold transition-colors;
 }
@@ -30,6 +62,7 @@ a {
 	@apply uppercase tracking-[0.35em] text-xs md:text-sm text-gold/80 font-semibold;
 }
 
+
 p-button.outline-flip::part(button) {
 	background: rgba(0, 0, 0, 0.85);
 	border: 1px solid rgba(0, 0, 0, 0.9);
@@ -41,23 +74,34 @@ p-button.outline-flip::part(button) {
 	transition: border-color 200ms ease, background-color 200ms ease, color 200ms ease;
 }
 
-p-button.hero-cta::part(button) {
-	background: rgba(255, 255, 255, 0.05);
+body p-button.hero-cta::part(button) {
+	background: rgba(255, 255, 255, 0.12) !important;
 	color: #ffffff !important;
-	border: 1px solid #ffffff;
+	border: 1px solid #ffffff !important;
 	box-shadow: 0 18px 34px rgba(0, 0, 0, 0.18);
 	text-shadow: 0 0 12px rgba(0, 0, 0, 0.35);
 }
 
-p-button.hero-cta::part(label) {
+body p-button.hero-cta::part(label) {
 	color: #ffffff !important;
 	letter-spacing: 0.04em;
 	text-transform: uppercase;
 }
 
-p-button.hero-cta:hover::part(button) {
-	background: rgba(255, 255, 255, 0.15);
-	border-color: #ffffff;
+body p-button.hero-cta:hover::part(button),
+body p-button.hero-cta:focus-visible::part(button) {
+	background: rgba(255, 255, 255, 0.22) !important;
+	border-color: #ffffff !important;
+	color: #ffffff !important;
+}
+
+body p-button.hero-cta {
+	--p-button-color: #ffffff !important;
+	--p-button-background-color: rgba(255, 255, 255, 0.14) !important;
+	--p-button-border-color: #ffffff !important;
+	--p-button-hover-background-color: rgba(255, 255, 255, 0.22) !important;
+	--p-button-hover-color: #ffffff !important;
+	--p-button-hover-border-color: #ffffff !important;
 }
 
 .section-fade {
@@ -294,12 +338,7 @@ p-button.outline-flip:focus-visible::part(button) {
 	color: #ffffff;
 }
 
-p-button.hero-cta:hover::part(button),
-p-button.hero-cta:focus-visible::part(button) {
-	background: rgba(255, 255, 255, 0.15);
-	color: #ffffff;
-	border-color: rgba(255, 255, 255, 0.85);
-}
+/* Hover géré via host variables ci-dessus */
 
 #ahd-global-nav {
 	--nav-bg: rgba(1, 1, 4, 0);

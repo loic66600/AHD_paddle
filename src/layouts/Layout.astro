@@ -117,17 +117,21 @@ const darkLogo = withBase('/images/logo_blanc.png');
         }
 
         const sections = Array.from(document.querySelectorAll('[data-bg]'));
+        let pageBgTimer = null;
+        let navThemeTimer = null;
 
-        const applyTheme = (section) => {
-          if (!section) {
-            return;
-          }
-          const color = section.getAttribute('data-bg');
+        const parseDelay = (value, fallback = 0) => {
+          const parsed = Number.parseInt(value ?? '', 10);
+          return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
+        };
+
+        const setBodyBackground = (color) => {
           if (color) {
             document.body?.style.setProperty('--page-bg', color);
           }
+        };
 
-          const theme = section.getAttribute('data-nav') || 'dark';
+        const setNavigationTheme = (theme) => {
           const isLight = theme === 'light';
           if (nav) {
             nav.classList.toggle('nav-light', isLight);
@@ -135,6 +139,59 @@ const darkLogo = withBase('/images/logo_blanc.png');
           }
           if (navLogo) {
             navLogo.setAttribute('src', isLight ? LOGO_LIGHT : LOGO_DARK);
+          }
+        };
+
+        const applyTheme = (section) => {
+          if (!section) {
+            return;
+          }
+
+          if (pageBgTimer) {
+            window.clearTimeout(pageBgTimer);
+            pageBgTimer = null;
+          }
+          if (navThemeTimer) {
+            window.clearTimeout(navThemeTimer);
+            navThemeTimer = null;
+          }
+
+          const targetColor = section.getAttribute('data-bg');
+          const initialColor = section.getAttribute('data-bg-initial');
+          const colorDelay = parseDelay(section.getAttribute('data-bg-delay'));
+
+          const commitColor = () => {
+            if (targetColor) {
+              setBodyBackground(targetColor);
+            }
+          };
+
+          if (colorDelay > 0) {
+            if (initialColor) {
+              setBodyBackground(initialColor);
+            }
+            pageBgTimer = window.setTimeout(() => {
+              commitColor();
+              pageBgTimer = null;
+            }, colorDelay);
+          } else {
+            commitColor();
+          }
+
+          const targetNavTheme = section.getAttribute('data-nav') || 'dark';
+          const initialNavTheme = section.getAttribute('data-nav-initial');
+          const navDelay = parseDelay(section.getAttribute('data-nav-delay'), colorDelay);
+
+          if (navDelay > 0) {
+            if (initialNavTheme) {
+              setNavigationTheme(initialNavTheme);
+            }
+            navThemeTimer = window.setTimeout(() => {
+              setNavigationTheme(targetNavTheme);
+              navThemeTimer = null;
+            }, navDelay);
+          } else {
+            setNavigationTheme(targetNavTheme);
           }
         };
 
@@ -151,7 +208,7 @@ const darkLogo = withBase('/images/logo_blanc.png');
                 }
               });
             },
-            { threshold: 0.35 }
+            { threshold: 0.1, rootMargin: '-20% 0px -20% 0px' }
           );
 
           sections.forEach((section) => observer.observe(section));
@@ -168,9 +225,12 @@ const darkLogo = withBase('/images/logo_blanc.png');
               current = candidate;
               applyTheme(current);
             }
+
           };
 
           window.addEventListener('scroll', updateOnScroll, { passive: true });
+          window.addEventListener('resize', updateOnScroll, { passive: true });
+          requestAnimationFrame(updateOnScroll);
         } else {
           applyTheme(document.body);
         }

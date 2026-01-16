@@ -5,15 +5,25 @@ const historyImage = withBase('/images/ahd-history.png');
 ---
 
 <!-- Récit de la marque pour asseoir la crédibilité -->
-<section id="histoire" class="py-24 md:py-32 bg-white text-midnight" data-bg="#ffffff" data-nav="light">
+<section
+  id="histoire"
+  class="tint-section history-section py-24 md:py-32"
+  data-bg="#ffffff"
+  data-bg-delay="300"
+  data-bg-initial="#010104"
+  data-nav="light"
+  data-nav-initial="dark"
+  data-nav-delay="300"
+  data-local-light="300"
+>
   <div class="container grid gap-12 lg:grid-cols-[1.1fr_1fr] items-center">
     <div class="space-y-6">
-      <span class="section-eyebrow text-midnight/60">Histoire</span>
-      <h2 class="text-3xl md:text-4xl font-semibold">AHD, pionnier de la glisse depuis 1990.</h2>
-      <p class="text-base md:text-lg leading-relaxed text-midnight/80">
+      <span class="section-eyebrow tint-section__eyebrow">Histoire</span>
+      <h2 class="text-3xl md:text-4xl font-semibold tint-section__title">AHD, pionnier de la glisse depuis 1990.</h2>
+      <p class="tint-section__copy text-base md:text-lg leading-relaxed">
         AHD naît de la vision de Christophe Piaget, désireux d’apporter les technologies aéronautiques au windsurf. Depuis la Suisse jusqu’à la Bretagne, la marque impose une exigence de précision et d’innovation continue.
       </p>
-      <p class="text-base md:text-lg leading-relaxed text-midnight/80">
+      <p class="tint-section__copy text-base md:text-lg leading-relaxed">
         Aujourd’hui encore, nos ateliers fabriquent à la main des planches pensées pour les riders passionnés de vitesse, de foil et d’exploration, accompagnés par Foil&co.
       </p>
       <p-button variant="secondary" class="outline-flip">

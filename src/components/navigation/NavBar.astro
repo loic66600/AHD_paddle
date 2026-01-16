@@ -45,4 +45,36 @@ const menuItems = [
 			))}
 		</nav>
 	</div>
+
+	<label
+		for="ahd-drawer-toggle"
+		class="fixed inset-0 z-40 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 peer-checked:opacity-100 peer-checked:pointer-events-auto"
+		aria-hidden="true"
+	></label>
+
+	<script type="module">
+		const drawerToggle = document.getElementById('ahd-drawer-toggle');
+		const drawerLinks = document.querySelectorAll('#ahd-drawer a');
+		const menuButton = document.getElementById('ahd-menu-button');
+
+		if (drawerToggle && menuButton) {
+			menuButton.setAttribute('aria-expanded', String(drawerToggle.checked));
+			drawerToggle.addEventListener('change', () => {
+				menuButton.setAttribute('aria-expanded', String(drawerToggle.checked));
+			});
+		}
+
+		if (drawerToggle && drawerLinks.length) {
+			const closeMenu = () => {
+				drawerToggle.checked = false;
+				if (menuButton) {
+					menuButton.setAttribute('aria-expanded', 'false');
+				}
+			};
+
+			drawerLinks.forEach((link) => {
+				link.addEventListener('click', closeMenu);
+			});
+		}
+	</script>
 </div>
