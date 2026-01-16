@@ -67,6 +67,51 @@ a {
 	text-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), 0 0 16px rgba(0, 0, 0, 0.35);
 }
 
+@media (max-width: 640px) {
+	body {
+		font-size: 1.0625rem;
+		line-height: 1.65;
+	}
+
+	main p,
+	main li,
+	main span {
+		font-size: 1.05rem;
+	}
+
+	.section-title {
+		font-size: clamp(2.25rem, 7vw, 2.75rem);
+	}
+
+	.section-eyebrow {
+		font-size: 0.85rem;
+		letter-spacing: 0.45em;
+	}
+
+	.hero-copy-shadow h1 {
+		font-size: clamp(2.75rem, 12vw, 3.25rem);
+	}
+
+	.hero-copy-shadow p {
+		font-size: 1.1rem;
+	}
+
+	#ahd-menu-button,
+	.nav-tagline {
+		font-size: 0.95rem;
+		letter-spacing: 0.3em;
+	}
+
+	#ahd-drawer nav {
+		gap: 1.5rem;
+	}
+
+	#ahd-drawer nav a {
+		font-size: 0.95rem;
+		letter-spacing: 0.3em;
+	}
+}
+
 
 p-button.outline-flip::part(button) {
 	background: rgba(0, 0, 0, 0.85);

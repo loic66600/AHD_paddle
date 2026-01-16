@@ -56,7 +56,7 @@ const accessories = [
 ---
 
 <Layout title="AHD Paddle | Accessoires">
-  <main class="space-y-24 pb-24">
+  <main class="pb-24">
     <section
       class="relative flex min-h-[70vh] items-center justify-center overflow-hidden text-center"
       data-bg="#ffffff"
@@ -72,8 +72,13 @@ const accessories = [
       </div>
     </section>
 
-    <section class="bg-white" data-bg="#ffffff" data-nav="light">
+    <section class="bg-white pt-12 lg:pt-16" data-bg="#ffffff" data-nav="light">
       <div class="container space-y-10 text-midnight">
+        <nav aria-label="Fil d’Ariane" class="flex items-center gap-2 text-sm text-midnight/60">
+          <a href={withBase('/')} class="font-medium text-midnight/70 transition-colors duration-200 hover:text-midnight">Accueil</a>
+          <span class="text-midnight/30">/</span>
+          <span class="text-midnight font-semibold">{hero.title}</span>
+        </nav>
         <div class="space-y-6 text-center">
           <h2 class="section-title text-3xl md:text-4xl">Équipements essentiels</h2>
           <p class="mx-auto max-w-3xl text-base md:text-lg text-midnight/70">
