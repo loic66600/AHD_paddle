@@ -12,19 +12,22 @@ const innovationVideo = withBase('/media/ahd-innovation.mp4');
   data-bg="#3a37371c"
   data-nav="dark"
 >
-  <div class="absolute inset-0 -z-10">
+  <div class="absolute inset-0">
     <video
-      class="h-full w-full object-cover pointer-events-none"
-      src={innovationVideo}
+      class="h-full w-full object-cover"
       autoplay
       loop
       muted
       playsinline
-      preload="metadata"
-    ></video>
+      preload="auto"
+      data-auto-play
+    >
+      <source src={innovationVideo} type="video/mp4" />
+      Votre navigateur ne prend pas en charge la lecture de cette vidéo.
+    </video>
   </div>
 
-  <div class="absolute inset-0 bg-gradient-to-r from-midnight/60 via-midnight/40 to-midnight/60 -z-10"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-midnight/25 via-midnight/15 to-midnight/25 opacity-70 pointer-events-none mix-blend-soft-light"></div>
 
   <div class="relative z-10">
     <!-- Contenu additionnel à définir par la direction artistique -->

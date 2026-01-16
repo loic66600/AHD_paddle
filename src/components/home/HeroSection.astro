@@ -1,4 +1,5 @@
 ---
+
 import { withBase } from '../../utils/url';
 
 interface Props {
@@ -13,12 +14,16 @@ const heroVideo = withBase('/media/ahd-hero.mp4');
 <section class="relative h-[95vh] min-h-[640px]" data-bg="#010104" data-nav="dark">
   <video
     class="absolute inset-0 h-full w-full object-cover"
-    src={heroVideo}
     autoplay
     loop
     muted
     playsinline
-  ></video>
+    preload="auto"
+    data-auto-play
+  >
+    <source src={heroVideo} type="video/mp4" />
+    Votre navigateur ne prend pas en charge la lecture de cette vidéo.
+  </video>
   <div class="absolute inset-0 bg-gradient-to-r from-midnight/50 via-manta/40 to-lagoon/35"></div>
   <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,#1c4b67_0%,transparent_55%)] opacity-50"></div>
 

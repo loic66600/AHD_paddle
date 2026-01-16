@@ -7,12 +7,7 @@ import Footer from '../components/Footer.astro';
 import partials from '@porsche-design-system/components-js/partials/index.js';
 import { withBase } from '../utils/url';
 
-const {
-  getMetaTagsAndIconLinks,
-  getFontLinks,
-  getComponentChunkLinks,
-  getLoaderScript
-} = partials;
+const { getFontLinks, getComponentChunkLinks, getLoaderScript } = partials;
 
 const { title = 'AHD Paddle' } = Astro.props;
 const favicon = withBase('/images/favicon.png');
@@ -24,10 +19,12 @@ const darkLogo = withBase('/images/logo_blanc.png');
   <head>
     <meta charset="utf-8" />
     <title>{title}</title>
-    <Fragment set:html={getMetaTagsAndIconLinks({ appTitle: title, appLogo: favicon })} />
     <Fragment set:html={getFontLinks()} />
     <Fragment set:html={getComponentChunkLinks()} />
+    <meta name="apple-mobile-web-app-title" content={title} />
+    <meta name="theme-color" content="#010104" />
     <link rel="icon" type="image/png" href={favicon} />
+    <link rel="apple-touch-icon" href={favicon} />
   </head>
   <body>
     <!-- Barre de navigation globale utilisée sur toutes les pages -->
@@ -39,89 +36,150 @@ const darkLogo = withBase('/images/logo_blanc.png');
     <Footer />
 
     <script type="module">
-      // Orchestration du tiroir de navigation et du changement de thème selon les sections
-      const drawer = document.getElementById('ahd-drawer');
-      const toggle = document.getElementById('ahd-menu-button');
-      const nav = document.getElementById('ahd-global-nav');
-      const navLogo = document.getElementById('ahd-nav-logo');
       const LOGO_LIGHT = ${JSON.stringify(lightLogo)};
       const LOGO_DARK = ${JSON.stringify(darkLogo)};
 
-      if (drawer && toggle) {
-        const closeDrawer = (event) => {
-          if (!drawer.classList.contains('translate-x-0')) {
-            return;
-          }
-          if (event.type === 'keydown' && event.key !== 'Escape') {
-            return;
-          }
-          drawer.classList.remove('translate-x-0');
-          drawer.classList.add('-translate-x-full');
-          toggle.setAttribute('aria-expanded', 'false');
-          window.removeEventListener('keydown', closeDrawer);
-          window.removeEventListener('click', handleOutsideClick, true);
-        };
-
-        const handleOutsideClick = (event) => {
-          if (!drawer.contains(event.target) && event.target !== toggle) {
-            closeDrawer(event);
-          }
-        };
-
-        toggle.addEventListener('click', () => {
-          const isOpen = drawer.classList.toggle('translate-x-0');
-          drawer.classList.toggle('-translate-x-full', !isOpen);
-          toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-          if (isOpen) {
-            window.addEventListener('keydown', closeDrawer);
-            window.addEventListener('click', handleOutsideClick, true);
-          } else {
-            window.removeEventListener('keydown', closeDrawer);
-            window.removeEventListener('click', handleOutsideClick, true);
-          }
-        });
-      }
-
-      const applyNavTheme = (section) => {
-        if (!nav || !section) {
-          return;
-        }
-        const theme = section.getAttribute('data-nav') || 'dark';
-        const isLight = theme === 'light';
-        nav.classList.toggle('nav-light', isLight);
-        nav.classList.toggle('nav-dark', !isLight);
-        if (navLogo) {
-          navLogo.setAttribute('src', isLight ? LOGO_LIGHT : LOGO_DARK);
+      const ready = (callback) => {
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+          requestAnimationFrame(callback);
+        } else {
+          document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(callback), { once: true });
         }
       };
 
-      const themedSections = document.querySelectorAll('[data-bg]');
-      if (themedSections.length) {
-        const setBackground = (section) => {
+      const ensureVideoAutoplay = () => {
+        const videos = document.querySelectorAll('video[data-auto-play]');
+        videos.forEach((video) => {
+          const startPlayback = () => {
+            video.muted = true;
+            video.setAttribute('muted', '');
+            video.setAttribute('playsinline', '');
+            const playPromise = video.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+              playPromise.catch(() => {
+                const resume = () => {
+                  video.play().catch(() => {});
+                };
+                window.addEventListener('pointerdown', resume, { once: true });
+                window.addEventListener('touchstart', resume, { once: true });
+              });
+            }
+          };
+
+          if (video.readyState >= 2) {
+            startPlayback();
+          } else {
+            video.addEventListener('canplaythrough', startPlayback, { once: true });
+            video.load();
+          }
+        });
+      };
+
+      const initNavigation = () => {
+        const drawer = document.getElementById('ahd-drawer');
+        const toggleInput = document.getElementById('ahd-drawer-toggle');
+        const toggleLabel = document.getElementById('ahd-menu-button');
+        const nav = document.getElementById('ahd-global-nav');
+        const navLogo = document.getElementById('ahd-nav-logo');
+        const docEl = document.documentElement;
+
+        if (drawer && toggleInput) {
+          const setOpen = (open) => {
+            toggleInput.checked = open;
+            drawer.classList.toggle('is-open', open);
+            toggleLabel?.setAttribute('aria-expanded', open ? 'true' : 'false');
+            docEl.classList.toggle('drawer-open', open);
+            if (open) {
+              window.addEventListener('keydown', handleKeydown);
+              window.addEventListener('click', handleOutsideClick, true);
+            } else {
+              window.removeEventListener('keydown', handleKeydown);
+              window.removeEventListener('click', handleOutsideClick, true);
+            }
+          };
+
+          const handleOutsideClick = (event) => {
+            if (!drawer.contains(event.target) && !toggleLabel?.contains(event.target)) {
+              setOpen(false);
+            }
+          };
+
+          const handleKeydown = (event) => {
+            if (event.key === 'Escape') {
+              setOpen(false);
+            }
+          };
+
+          toggleInput.addEventListener('change', () => setOpen(toggleInput.checked));
+
+          // Ensure initial state sync in case of hydration timing
+          requestAnimationFrame(() => setOpen(toggleInput.checked));
+        }
+
+        const sections = Array.from(document.querySelectorAll('[data-bg]'));
+
+        const applyTheme = (section) => {
+          if (!section) {
+            return;
+          }
           const color = section.getAttribute('data-bg');
           if (color) {
-            document.body.style.setProperty('--page-bg', color);
+            document.body?.style.setProperty('--page-bg', color);
           }
-          applyNavTheme(section);
+
+          const theme = section.getAttribute('data-nav') || 'dark';
+          const isLight = theme === 'light';
+          if (nav) {
+            nav.classList.toggle('nav-light', isLight);
+            nav.classList.toggle('nav-dark', !isLight);
+          }
+          if (navLogo) {
+            navLogo.setAttribute('src', isLight ? LOGO_LIGHT : LOGO_DARK);
+          }
         };
 
-        setBackground(themedSections[0]);
+        if (sections.length) {
+          let current = sections[0];
+          applyTheme(current);
 
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                setBackground(entry.target);
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  current = entry.target;
+                  applyTheme(current);
+                }
+              });
+            },
+            { threshold: 0.35 }
+          );
+
+          sections.forEach((section) => observer.observe(section));
+
+          const updateOnScroll = () => {
+            const viewportCenter = window.scrollY + window.innerHeight * 0.45;
+            let candidate = current;
+            for (const section of sections) {
+              if (section.offsetTop <= viewportCenter) {
+                candidate = section;
               }
-            });
-          },
-          { threshold: 0.5 }
-        );
+            }
+            if (candidate !== current) {
+              current = candidate;
+              applyTheme(current);
+            }
+          };
 
-        themedSections.forEach((section) => observer.observe(section));
-      } else {
-        applyNavTheme(document.body);
-      }
+          window.addEventListener('scroll', updateOnScroll, { passive: true });
+        } else {
+          applyTheme(document.body);
+        }
+      };
+
+      ready(() => {
+        initNavigation();
+        ensureVideoAutoplay();
+      });
     </script>
 
     <Fragment set:html={getLoaderScript()} />

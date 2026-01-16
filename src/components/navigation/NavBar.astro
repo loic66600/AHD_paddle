@@ -11,33 +11,38 @@ const menuItems = [
 ];
 ---
 
-<!-- Navigation principale avec menu fixe -->
-<header
-	id="ahd-global-nav"
-	class="nav-dark fixed inset-x-0 top-0 z-40 grid grid-cols-[auto_1fr_auto] items-center gap-4 px-6 py-5 md:px-12"
->
-	<button
-		id="ahd-menu-button"
-		class="nav-trigger text-sm uppercase tracking-[0.35em] focus:outline-none"
-		aria-controls="ahd-drawer"
-		aria-expanded="false"
-	>
-		Menu
-	</button>
-	<a href={homeLink} class="nav-brand flex flex-col items-center gap-3 justify-self-center focus:outline-none">
-		<img id="ahd-nav-logo" src={logoSrc} alt="AHD" class="nav-logo h-9 w-auto" loading="lazy" />
-		<p class="nav-tagline text-xs uppercase tracking-[0.5em]">AHD Paddle Division</p>
-	</a>
-	<div class="w-16"></div>
-</header>
+<div class="relative">
+	<input id="ahd-drawer-toggle" type="checkbox" class="peer sr-only" aria-hidden="true" />
 
-<div
-	id="ahd-drawer"
-	class="fixed inset-y-0 left-0 z-50 w-72 max-w-xs -translate-x-full transform bg-midnight/95 px-8 py-12 transition-transform duration-500 will-change-transform"
->
-	<nav class="flex flex-col gap-8 text-sm uppercase tracking-[0.35em] text-foam/80">
-		{menuItems.map((item) => (
-			<a href={item.href}>{item.label}</a>
-		))}
-	</nav>
+	<!-- Navigation principale avec menu fixe -->
+	<header
+		id="ahd-global-nav"
+		class="nav-dark fixed inset-x-0 top-0 z-40 grid grid-cols-[auto_1fr_auto] items-center gap-4 px-6 py-5 md:px-12"
+	>
+		<label
+			id="ahd-menu-button"
+			for="ahd-drawer-toggle"
+			class="nav-trigger text-sm uppercase tracking-[0.35em] focus:outline-none cursor-pointer"
+			aria-controls="ahd-drawer"
+			aria-expanded="false"
+		>
+			Menu
+		</label>
+		<a href={homeLink} class="nav-brand flex flex-col items-center gap-3 justify-self-center focus:outline-none">
+			<img id="ahd-nav-logo" src={logoSrc} alt="AHD" class="nav-logo h-9 w-auto" loading="lazy" />
+			<p class="nav-tagline text-xs uppercase tracking-[0.5em]">AHD Paddle Division</p>
+		</a>
+		<div class="w-16"></div>
+	</header>
+
+	<div
+		id="ahd-drawer"
+		class="fixed inset-y-0 left-0 z-50 w-72 max-w-xs -translate-x-full transform bg-midnight/95 px-8 py-12 transition-transform duration-500 will-change-transform peer-checked:translate-x-0"
+	>
+		<nav class="flex flex-col gap-8 text-sm uppercase tracking-[0.35em] text-foam/80">
+			{menuItems.map((item) => (
+				<a href={item.href}>{item.label}</a>
+			))}
+		</nav>
+	</div>
 </div>
