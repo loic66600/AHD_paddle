@@ -1,3 +1,9 @@
+---
+import { withBase } from '../../utils/url';
+
+const historyImage = withBase('/images/ahd-history.png');
+---
+
 <!-- Récit de la marque pour asseoir la crédibilité -->
 <section id="histoire" class="py-24 md:py-32 bg-white text-midnight" data-bg="#ffffff" data-nav="light">
   <div class="container grid gap-12 lg:grid-cols-[1.1fr_1fr] items-center">
@@ -15,7 +21,7 @@
       </p-button>
     </div>
     <div class="overflow-hidden rounded-[2.5rem] shadow-glow">
-      <img src="/images/ahd-history.png" alt="Historique AHD" class="h-full w-full object-cover" loading="lazy" />
+      <img src={historyImage} alt="Historique AHD" class="h-full w-full object-cover" loading="lazy" />
     </div>
   </div>
 </section>

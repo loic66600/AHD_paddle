@@ -5,6 +5,7 @@ import NavBar from '../components/navigation/NavBar.astro';
 import Footer from '../components/Footer.astro';
 
 import partials from '@porsche-design-system/components-js/partials/index.js';
+import { withBase } from '../utils/url';
 
 const {
   getMetaTagsAndIconLinks,
@@ -14,16 +15,19 @@ const {
 } = partials;
 
 const { title = 'AHD Paddle' } = Astro.props;
+const favicon = withBase('/images/favicon.png');
+const lightLogo = withBase('/images/logo.webp');
+const darkLogo = withBase('/images/logo_blanc.png');
 ---
 <!doctype html>
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
     <title>{title}</title>
-    <Fragment set:html={getMetaTagsAndIconLinks({ appTitle: title, appLogo: '/images/favicon.png' })} />
+    <Fragment set:html={getMetaTagsAndIconLinks({ appTitle: title, appLogo: favicon })} />
     <Fragment set:html={getFontLinks()} />
     <Fragment set:html={getComponentChunkLinks()} />
-    <link rel="icon" type="image/png" href="/images/favicon.png" />
+    <link rel="icon" type="image/png" href={favicon} />
   </head>
   <body>
     <!-- Barre de navigation globale utilisée sur toutes les pages -->
@@ -40,6 +44,8 @@ const { title = 'AHD Paddle' } = Astro.props;
       const toggle = document.getElementById('ahd-menu-button');
       const nav = document.getElementById('ahd-global-nav');
       const navLogo = document.getElementById('ahd-nav-logo');
+      const LOGO_LIGHT = ${JSON.stringify(lightLogo)};
+      const LOGO_DARK = ${JSON.stringify(darkLogo)};
 
       if (drawer && toggle) {
         const closeDrawer = (event) => {
@@ -85,7 +91,7 @@ const { title = 'AHD Paddle' } = Astro.props;
         nav.classList.toggle('nav-light', isLight);
         nav.classList.toggle('nav-dark', !isLight);
         if (navLogo) {
-          navLogo.setAttribute('src', isLight ? '/images/logo.webp' : '/images/logo_blanc.png');
+          navLogo.setAttribute('src', isLight ? LOGO_LIGHT : LOGO_DARK);
         }
       };
 

@@ -1,10 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { withBase } from '../utils/url';
 
 const hero = {
   title: 'Windsurf',
   subtitle: 'Planifiez vos runs pleine vitesse avec la collection AHD Windsurf.',
-  image: '/images/ahd-apex.jpg'
+  image: withBase('/images/ahd-apex.jpg')
 };
 
 const facets = [
@@ -28,28 +29,28 @@ const boards = [
     description: 'Shape freeride nerveux, idéal pour dompter les plans d’eau clapoteux.',
     volume: '95 L',
     price: '1849 €',
-    image: '/images/boards/ahd-fury.png'
+    image: withBase('/images/boards/ahd-fury.png')
   },
   {
     name: 'Zen',
     description: 'Glisse ultra stable pour enchainer les jibes toute la journée.',
     volume: '115 L',
     price: '949 €',
-    image: '/images/boards/ahd-zen.png'
+    image: withBase('/images/boards/ahd-zen.png')
   },
   {
     name: 'SL-S',
     description: 'Version slalom pure pensée pour accélérer dès la relance.',
     volume: '102 L',
     price: '1549 €',
-    image: '/images/boards/AHD_SLS.png'
+    image: withBase('/images/boards/AHD_SLS.png')
   },
   {
     name: 'Compact Foil',
     description: 'Carène compacte et portance rapide pour des envols précoces.',
     volume: '82 L',
     price: '1249 €',
-    image: '/images/boards/ahd-compact-foil.png'
+    image: withBase('/images/boards/ahd-compact-foil.png')
   }
 ];
 ---

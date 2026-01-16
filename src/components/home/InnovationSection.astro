@@ -1,3 +1,9 @@
+---
+import { withBase } from '../../utils/url';
+
+const innovationVideo = withBase('/media/ahd-innovation.mp4');
+---
+
 <!-- Bandeau innovation conservant la vidéo laboratoire -->
 <section
   id="innovation"
@@ -9,7 +15,7 @@
   <div class="absolute inset-0 -z-10">
     <video
       class="h-full w-full object-cover pointer-events-none"
-      src="/media/ahd-innovation.mp4"
+      src={innovationVideo}
       autoplay
       loop
       muted

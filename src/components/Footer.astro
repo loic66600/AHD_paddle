@@ -1,10 +1,18 @@
+---
+import { withBase } from '../utils/url';
+
+const homeLink = withBase('/');
+const footerLogo = withBase('/images/logo_blanc.png');
+const footerBackground = withBase('/images/piedpage.png');
+---
+
 <!-- Footer commun avec visuel fixe -->
-<footer class="ahd-footer">
+<footer class="ahd-footer" style={`--footer-background: url('${footerBackground}')`}>
   <div class="container">
     <div class="ahd-footer__grid">
       <div class="ahd-footer__brand">
-        <a href="/" aria-label="Retour à l’accueil">
-          <img src="/images/logo_blanc.png" alt="AHD" class="ahd-footer__logo" loading="lazy" />
+        <a href={homeLink} aria-label="Retour à l’accueil">
+          <img src={footerLogo} alt="AHD" class="ahd-footer__logo" loading="lazy" />
         </a>
         <p>
           Lorem ipsum dolor sit amet consectetur. Dignissim felis arcu egestas fermentum magna.

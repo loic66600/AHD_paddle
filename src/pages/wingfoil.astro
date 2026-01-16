@@ -1,10 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { withBase } from '../utils/url';
 
 const hero = {
   title: 'Wingfoil',
   subtitle: 'Des set-ups légers et précis pour décoller dès 10 nœuds.',
-  image: '/images/ahd-pulse.jpg'
+  image: withBase('/images/ahd-pulse.jpg')
 };
 
 const facets = [
@@ -28,28 +29,28 @@ const boards = [
     description: 'Prise en main immédiate, parfaite pour progresser en wing foil.',
     volume: '75 L',
     price: '899 €',
-    image: '/images/boards/ahd-compact-foil.png'
+    image: withBase('/images/boards/ahd-compact-foil.png')
   },
   {
     name: 'Fury Wing',
     description: 'Carène tendue et rails affutés pour les riders à la recherche de vitesse.',
     volume: '88 L',
     price: '999 €',
-    image: '/images/boards/ahd-fury.png'
+    image: withBase('/images/boards/ahd-fury.png')
   },
   {
     name: 'U-Surf Foil',
     description: 'Hyper compacte, elle maximise la maniabilité dans les vagues.',
     volume: '60 L',
     price: '949 €',
-    image: '/images/boards/ahd-zen.png'
+    image: withBase('/images/boards/ahd-zen.png')
   },
   {
     name: 'Sky Rider',
     description: 'Stabilité longitudinale accrue pour décoller tôt et rester en vol.',
     volume: '100 L',
     price: '975 €',
-    image: '/images/boards/ahd-compact-foil.png'
+    image: withBase('/images/boards/ahd-compact-foil.png')
   }
 ];
 ---

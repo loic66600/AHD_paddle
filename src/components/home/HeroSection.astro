@@ -1,16 +1,19 @@
 ---
+import { withBase } from '../../utils/url';
+
 interface Props {
   ctaLabel: string;
 }
 
 const { ctaLabel } = Astro.props;
+const heroVideo = withBase('/media/ahd-hero.mp4');
 ---
 
 <!-- Hero immersif contrôlé depuis la page d'accueil -->
 <section class="relative h-[95vh] min-h-[640px]" data-bg="#010104" data-nav="dark">
   <video
     class="absolute inset-0 h-full w-full object-cover"
-    src="/media/ahd-hero.mp4"
+    src={heroVideo}
     autoplay
     loop
     muted

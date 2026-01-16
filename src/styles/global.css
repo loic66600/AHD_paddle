@@ -81,7 +81,7 @@ p-button.hero-cta::part(label) {
 	content: "";
 	position: absolute;
 	inset: 0;
-	background-image: url('/images/piedpage.png');
+	background-image: var(--footer-background, none);
 	background-size: cover;
 	background-position: center;
 	background-attachment: fixed;
