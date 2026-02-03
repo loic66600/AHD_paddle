@@ -9,7 +9,7 @@ import { withBase } from '../utils/url';
 
 const { getFontLinks, getComponentChunkLinks, getLoaderScript } = partials;
 
-const { title = 'AHD Paddle' } = Astro.props;
+const { title = 'AHD Paddle', showFooter = true } = Astro.props;
 const favicon = withBase('/images/favicon.png');
 const lightLogo = withBase('/images/logo.webp');
 const darkLogo = withBase('/images/logo_blanc.png');
@@ -33,7 +33,7 @@ const darkLogo = withBase('/images/logo_blanc.png');
     <slot />
 
     <!-- Bas de page partagé pour l’ensemble du site -->
-    <Footer />
+    {showFooter && <Footer />}
 
     <script type="module">
       const LOGO_LIGHT = ${JSON.stringify(lightLogo)};

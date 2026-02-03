@@ -29,4 +29,16 @@ import { withBase } from '../utils/url';
       </div>
     </section>
   </main>
+
+  <script type="module" is:inline>
+    const nav = document.getElementById('ahd-global-nav');
+    if (nav) {
+      nav.classList.add('nav-dark');
+      nav.classList.remove('nav-light');
+      nav.style.setProperty('--nav-bg', 'rgba(1, 1, 4, 0.65)');
+      nav.style.setProperty('--nav-border', 'rgba(255, 255, 255, 0.15)');
+      nav.style.setProperty('--nav-foreground', 'rgba(255, 255, 255, 0.92)');
+      nav.style.setProperty('--nav-hover', '#ffffff');
+    }
+  </script>
 </Layout>

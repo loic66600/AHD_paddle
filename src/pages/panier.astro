@@ -1,0 +1,236 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { withBase } from '../utils/url';
+---
+
+<Layout title="AHD Paddle | Panier" showFooter={false}>
+  <main class="bg-white panier-scroll" data-bg="#ffffff" data-nav="light">
+    <section class="min-h-screen pt-28 md:pt-32">
+      <div class="min-h-screen w-full flex flex-col md:flex-row md:items-start md:justify-evenly md:divide-x md:divide-midnight/10">
+        <!-- Colonne gauche : formulaire -->
+        <div class="order-1 w-full bg-white px-4 pb-16 pt-8 sm:px-8 md:px-12 lg:px-16 md:h-[calc(100vh-8rem)] md:overflow-y-auto md:flex-none md:basis-[45%]">
+          <div class="mx-auto w-full max-w-2xl space-y-10 text-midnight">
+            <div class="space-y-4">
+              <h1 class="text-xl sm:text-2xl md:text-3xl font-semibold">Contact</h1>
+              <div class="space-y-3">
+                <input
+                  type="email"
+                  placeholder="Adresse e-mail"
+                  class="w-full rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
+                />
+                <label class="flex items-center gap-3 text-sm text-midnight/70">
+                  <input type="checkbox" class="h-4 w-4 rounded border-midnight/30 text-midnight" />
+                  Envoyez-moi des nouvelles et des offres par e-mail
+                </label>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <h2 class="text-lg sm:text-xl font-semibold">Livraison</h2>
+              <div class="grid gap-4">
+                <select class="w-full rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight focus:border-midnight focus:outline-none">
+                  <option>Pays/région</option>
+                  <option>France</option>
+                  <option>Belgique</option>
+                  <option>Allemagne</option>
+                </select>
+                <div class="grid gap-4 md:grid-cols-2">
+                  <input
+                    type="text"
+                    placeholder="Prénom"
+                    class="w-full rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Nom"
+                    class="w-full rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
+                  />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Adresse"
+                  class="w-full rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
+                />
+                <div class="grid gap-4 md:grid-cols-2">
+                  <input
+                    type="text"
+                    placeholder="Code postal"
+                    class="w-full rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Ville"
+                    class="w-full rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
+                  />
+                </div>
+                <input
+                  type="tel"
+                  placeholder="Numéro de téléphone"
+                  class="w-full rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <h2 class="text-lg sm:text-xl font-semibold">Mode d'expédition</h2>
+              <div class="rounded-xl border border-midnight/15 bg-white px-4 py-4 text-sm text-midnight/70">
+                Saisir une adresse d’expédition pour voir les options disponibles.
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <h2 class="text-lg sm:text-xl font-semibold">Paiement</h2>
+              <p class="text-sm text-midnight/60">Toutes les transactions sont sécurisées et chiffrées.</p>
+              <div class="rounded-2xl border border-midnight/20 bg-white">
+                <div class="flex items-center justify-between border-b border-midnight/10 px-4 py-3">
+                  <label class="flex items-center gap-3 text-sm font-semibold">
+                    <input type="radio" name="payment" checked class="h-4 w-4 text-midnight" />
+                    Carte de crédit
+                  </label>
+                  <div class="flex items-center gap-2 text-xs text-midnight/60">
+                    <span class="rounded border border-midnight/15 px-2 py-0.5">VISA</span>
+                    <span class="rounded border border-midnight/15 px-2 py-0.5">MC</span>
+                    <span class="rounded border border-midnight/15 px-2 py-0.5">AMEX</span>
+                    <span class="rounded border border-midnight/15 px-2 py-0.5">+2</span>
+                  </div>
+                </div>
+                <div class="space-y-3 px-4 py-4">
+                  <input
+                    type="text"
+                    placeholder="Numéro de carte"
+                    class="w-full rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
+                  />
+                  <div class="grid gap-3 md:grid-cols-2">
+                    <input
+                      type="text"
+                      placeholder="Date d’expiration (MM/AA)"
+                      class="w-full rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Code de sécurité"
+                      class="w-full rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Nom sur la carte"
+                    class="w-full rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
+                  />
+                  <label class="flex items-center gap-3 text-sm text-midnight/70">
+                    <input type="checkbox" class="h-4 w-4 rounded border-midnight/30 text-midnight" checked />
+                    Utiliser l’adresse d’expédition comme adresse de facturation
+                  </label>
+                </div>
+                <div class="border-t border-midnight/10 px-4 py-3">
+                  <label class="flex items-center justify-between text-sm">
+                    <span class="flex items-center gap-3">
+                      <input type="radio" name="payment" class="h-4 w-4 text-midnight" />
+                      PayPal
+                    </span>
+                    <span class="text-xs text-midnight/60">PayPal</span>
+                  </label>
+                </div>
+                <div class="border-t border-midnight/10 px-4 py-3">
+                  <label class="flex items-center justify-between text-sm">
+                    <span class="flex items-center gap-3">
+                      <input type="radio" name="payment" class="h-4 w-4 text-midnight" />
+                      Klarna - Payer maintenant, ou plus tard
+                    </span>
+                    <span class="text-xs text-midnight/60">Klarna</span>
+                  </label>
+                </div>
+              </div>
+              <div class="space-y-3">
+                <h3 class="text-sm font-semibold">Se souvenir de moi</h3>
+                <label class="flex items-center gap-3 rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight/70">
+                  <input type="checkbox" class="h-4 w-4 rounded border-midnight/30 text-midnight" />
+                  Sauvegardez mes données pour effectuer des paiements rapidement
+                </label>
+                <div class="flex items-center justify-between text-xs text-midnight/50">
+                  <span>Sécurisé et chiffré</span>
+                  <span>shop</span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="w-full rounded-full bg-midnight px-6 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-white"
+            >
+              Passer au paiement
+            </button>
+          </div>
+        </div>
+
+        <!-- Colonne droite : récapitulatif -->
+        <div class="order-2 w-full bg-[#f5f5f5] px-4 pb-16 pt-8 sm:px-8 md:px-12 lg:px-14 md:flex-none md:basis-[45%]">
+          <div class="mx-auto w-full max-w-md space-y-8 text-midnight md:sticky md:top-28">
+            <div class="flex items-center gap-4 rounded-2xl bg-white px-4 py-3 shadow-[0_16px_30px_rgba(15,23,42,0.08)]">
+              <div class="relative h-16 w-16 overflow-hidden rounded-lg bg-slate-100">
+                <img src={withBase('/images/boards/ahd-compact-foil.png')} alt="Produit" class="h-full w-full object-contain" />
+                <span class="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-midnight text-xs text-white">1</span>
+              </div>
+              <div class="flex-1 text-sm">
+                <p class="font-semibold">Pack AHD Wing Set</p>
+                <p class="text-xs text-midnight/60">Compact Foil / 75L</p>
+              </div>
+              <p class="text-sm font-semibold">888,00 €</p>
+            </div>
+
+            <div class="flex gap-3">
+              <input
+                type="text"
+                placeholder="Code de réduction ou carte-cadeau"
+                class="flex-1 rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
+              />
+              <button type="button" class="rounded-xl border border-midnight/20 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-midnight/70">
+                Valider
+              </button>
+            </div>
+
+            <div class="space-y-3 text-sm">
+              <div class="flex items-center gap-6">
+                <span class="w-40 text-midnight/70">Sous-total</span>
+                <span>888,00 €</span>
+              </div>
+              <div class="flex items-center gap-6">
+                <span class="w-40 text-midnight/70">Frais d’expédition</span>
+                <span class="text-midnight/50">Saisir une adresse d’expédition</span>
+              </div>
+            </div>
+
+            <div class="border-t border-midnight/10 pt-4">
+              <div class="flex items-center gap-6 text-base font-semibold">
+                <span class="w-40">Total</span>
+                <span>888,00 €</span>
+              </div>
+              <p class="mt-2 text-xs text-midnight/60">Taxes incluses.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="border-t border-midnight/10 px-4 py-6 text-sm text-midnight md:px-12 lg:px-16">
+      <div class="flex flex-wrap gap-x-6 gap-y-2">
+        <a href={withBase('/')} class="text-midnight underline underline-offset-2">Politique de remboursement</a>
+        <a href={withBase('/')} class="text-midnight underline underline-offset-2">Expédition</a>
+        <a href={withBase('/')} class="text-midnight underline underline-offset-2">Politique de confidentialité</a>
+        <a href={withBase('/')} class="text-midnight underline underline-offset-2">Conditions d’utilisation</a>
+        <a href={withBase('/')} class="text-midnight underline underline-offset-2">Mentions légales</a>
+      </div>
+    </div>
+    <script type="module" is:inline>
+      const nav = document.getElementById('ahd-global-nav');
+      if (nav) {
+        nav.classList.add('nav-dark');
+        nav.classList.remove('nav-light');
+        nav.style.setProperty('--nav-bg', 'rgba(1, 1, 4, 0.65)');
+        nav.style.setProperty('--nav-border', 'rgba(255, 255, 255, 0.15)');
+        nav.style.setProperty('--nav-foreground', 'rgba(255, 255, 255, 0.92)');
+        nav.style.setProperty('--nav-hover', '#ffffff');
+      }
+    </script>
+  </main>
+</Layout>
