@@ -9,6 +9,8 @@ const categories = [
 	{ href: withBase('/accessoires'), label: 'Accessoires' }
 ];
 
+const accountPage = withBase('/compte');
+
 const menuItems = [
 	{ href: withBase('/#univers'), label: '> Univers AHD', children: categories },
 	{ href: withBase('/#gamme'), label: 'Collection' },
@@ -19,6 +21,7 @@ const menuItems = [
 
 <div class="relative">
 	<input id="ahd-drawer-toggle" type="checkbox" class="peer sr-only" aria-hidden="true" />
+	<input id="ahd-account-toggle" type="checkbox" class="peer/account sr-only" aria-hidden="true" />
 
 	<!-- Navigation principale avec menu fixe -->
 	<header
@@ -38,8 +41,110 @@ const menuItems = [
 			<img id="ahd-nav-logo" src={logoSrc} alt="AHD" class="nav-logo h-9 w-auto" loading="lazy" />
 			<p class="nav-tagline text-xs uppercase tracking-[0.5em]">AHD Paddle Division</p>
 		</a>
-		<div class="w-16"></div>
+		<div class="flex items-center justify-self-end gap-4">
+			<a
+				id="ahd-account-button"
+				href={accountPage}
+				class="group flex h-10 w-10 items-center justify-center rounded-full border border-white/30 text-white/80 transition hover:border-white/60 hover:text-white focus:outline-none cursor-pointer"
+				aria-label="Compte utilisateur"
+				aria-controls="ahd-account-panel"
+				aria-expanded="false"
+			>
+				<svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+					<path
+						fill="currentColor"
+						d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"
+					/>
+				</svg>
+			</a>
+			<a
+				href={withBase('/panier')}
+				class="group flex h-10 w-10 items-center justify-center rounded-full border border-white/30 text-white/80 transition hover:border-white/60 hover:text-white focus:outline-none"
+				aria-label="Panier"
+			>
+				<svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
+					<path
+						fill="currentColor"
+						d="M7 6V5a5 5 0 0 1 10 0v1h3v14H4V6h3Zm2 0h6V5a3 3 0 0 0-6 0v1Z"
+					/>
+				</svg>
+			</a>
+		</div>
 	</header>
+
+	<!-- Panneau compte glissant depuis la droite -->
+	<aside
+		id="ahd-account-panel"
+		class="fixed inset-y-0 right-0 z-50 w-[min(90vw,420px)] translate-x-full bg-white text-midnight shadow-[0_24px_60px_rgba(15,23,42,0.25)] transition-transform duration-500 will-change-transform peer-checked/account:translate-x-0"
+		aria-labelledby="ahd-account-title"
+	>
+		<div class="flex items-center justify-between border-b border-midnight/10 px-6 py-5">
+			<div class="flex items-center gap-3">
+				<span class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-midnight/20">
+					<svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5 text-midnight/80">
+						<path
+							fill="currentColor"
+							d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"
+						/>
+					</svg>
+				</span>
+				<h2 id="ahd-account-title" class="text-base font-semibold">Mon compte</h2>
+			</div>
+			<button
+				type="button"
+				data-account-close
+				class="inline-flex items-center gap-2 rounded-full border border-midnight/15 px-3 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-midnight/70 transition hover:border-midnight/30 hover:text-midnight"
+			>
+				<span>fermer</span>
+				<span aria-hidden="true" class="text-base leading-none">×</span>
+			</button>
+		</div>
+		<div class="px-6 py-6 space-y-8">
+			<div class="space-y-4 text-center">
+				<p class="text-sm font-semibold tracking-[0.3em] text-midnight/80">CONNEXION</p>
+			</div>
+			<form class="space-y-4">
+				<div class="space-y-2">
+					<label for="account-email" class="text-xs font-semibold text-midnight/70">E-Mail*</label>
+					<input
+						id="account-email"
+						type="email"
+						placeholder="E-Mail*"
+						required
+						class="w-full rounded-full border border-midnight/20 bg-slate-50 px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
+					/>
+				</div>
+				<div class="space-y-2">
+					<label for="account-password" class="text-xs font-semibold text-midnight/70">Mot de passe</label>
+					<input
+						id="account-password"
+						type="password"
+						placeholder="Mot de passe"
+						required
+						class="w-full rounded-full border border-midnight/20 bg-slate-50 px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
+					/>
+				</div>
+				<a href={withBase('/')} class="text-xs font-semibold text-midnight underline underline-offset-2">Mot de passe oublié ?</a>
+				<button type="submit" class="mt-4 w-full rounded-full bg-midnight px-5 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-white">
+					Connexion
+				</button>
+			</form>
+
+			<div class="pt-2 space-y-3 text-center">
+				<p class="text-xs font-semibold uppercase tracking-[0.3em] text-midnight/70">N’ÊTES-VOUS PAS ENCORE INSCRIT ?</p>
+				<p class="text-sm text-midnight/70">
+					Inscris-toi maintenant pour suivre tes commandes et pour avoir un accès gratuit au contenu premium exclusif de AHD
+				</p>
+				<button
+					type="button"
+					data-account-signup
+					class="w-full rounded-full bg-midnight px-5 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-white"
+				>
+					Inscris-toi
+				</button>
+			</div>
+		</div>
+	</aside>
 
 	<div
 		id="ahd-drawer"
@@ -73,16 +178,58 @@ const menuItems = [
 		aria-hidden="true"
 	></label>
 
-	<script type="module">
+	<label
+		for="ahd-account-toggle"
+		class="fixed inset-0 z-40 bg-black/40 opacity-0 pointer-events-none transition-opacity duration-300 peer-checked/account:opacity-100 peer-checked/account:pointer-events-auto"
+		aria-hidden="true"
+	></label>
+
+	<script type="module" is:inline>
 		const drawerToggle = document.getElementById('ahd-drawer-toggle');
 		const drawerLinks = document.querySelectorAll('#ahd-drawer a');
 		const menuButton = document.getElementById('ahd-menu-button');
+		const accountToggle = document.getElementById('ahd-account-toggle');
+		const accountButton = document.getElementById('ahd-account-button');
+		const accountCloseButton = document.querySelector('[data-account-close]');
+		const accountSignupButton = document.querySelector('[data-account-signup]');
+		const accountPanel = document.getElementById('ahd-account-panel');
+		const docEl = document.documentElement;
+		const accountPageUrl = ${JSON.stringify(accountPage)};
+		const accountStorageKey = 'ahd-account-active';
+		const getStorage = () => {
+			try {
+				return window.localStorage;
+			} catch (error) {
+				return null;
+			}
+		};
 
 		if (drawerToggle && menuButton) {
 			menuButton.setAttribute('aria-expanded', String(drawerToggle.checked));
 			drawerToggle.addEventListener('change', () => {
 				menuButton.setAttribute('aria-expanded', String(drawerToggle.checked));
 			});
+		}
+
+		if (accountToggle && accountButton && accountPanel) {
+			accountButton.setAttribute('aria-expanded', String(accountToggle.checked));
+			const syncAccountState = () => {
+				accountButton.setAttribute('aria-expanded', String(accountToggle.checked));
+				docEl.classList.toggle('account-open', accountToggle.checked);
+				accountPanel.classList.toggle('is-open', accountToggle.checked);
+			};
+			accountToggle.addEventListener('change', syncAccountState);
+			accountButton.addEventListener('click', (event) => {
+				const storage = getStorage();
+				const hasAccount = storage?.getItem(accountStorageKey) === 'true';
+				if (hasAccount) {
+					return;
+				}
+				event.preventDefault();
+				accountToggle.checked = !accountToggle.checked;
+				syncAccountState();
+			});
+			syncAccountState();
 		}
 
 		if (drawerToggle && drawerLinks.length) {
@@ -96,6 +243,40 @@ const menuItems = [
 			drawerLinks.forEach((link) => {
 				link.addEventListener('click', closeMenu);
 			});
+		}
+
+		if (accountToggle && accountPanel) {
+			const closeAccount = () => {
+				accountToggle.checked = false;
+				if (accountButton) {
+					accountButton.setAttribute('aria-expanded', 'false');
+				}
+				docEl.classList.remove('account-open');
+				accountPanel.classList.remove('is-open');
+			};
+
+			accountCloseButton?.addEventListener('click', closeAccount);
+			accountSignupButton?.addEventListener('click', () => {
+				const storage = getStorage();
+				storage?.setItem(accountStorageKey, 'true');
+				window.location.href = accountPageUrl;
+			});
+
+			window.addEventListener('keydown', (event) => {
+				if (event.key === 'Escape' && accountToggle.checked) {
+					closeAccount();
+				}
+			});
+
+			window.addEventListener(
+				'click',
+				(event) => {
+					if (accountToggle.checked && accountPanel && !accountPanel.contains(event.target) && !accountButton?.contains(event.target)) {
+						closeAccount();
+					}
+				},
+				true
+			);
 		}
 	</script>
 </div>
