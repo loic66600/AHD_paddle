@@ -21,6 +21,20 @@ if (!product) {
 }
 
 const relatedProducts = getRelatedProducts(product);
+const descriptionImages = product.descriptionImages ?? [];
+const descriptionProgramme = product.programme ?? 'Programme en cours de mise à jour.';
+const descriptionPresentation = product.presentation ?? product.shortDescription;
+const hasDescription = Boolean(descriptionProgramme || descriptionPresentation || descriptionImages.length);
+const performanceMetrics = product.performance ?? [];
+const hasPerformance = performanceMetrics.length > 0;
+const technologyLinesRaw = product.technology ? product.technology.split('\n') : ['Informations techniques en cours de mise à jour.'];
+const technologyLines = technologyLinesRaw.length > 1
+  ? technologyLinesRaw
+  : technologyLinesRaw[0]
+      .split('. ')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((line) => (line.endsWith('.') ? line : `${line}.`));
 const shapeItems = [
   {
     key: 'outline',
@@ -46,7 +60,39 @@ const shapeItems = [
     description: product.shapeDescriptions?.nose,
     image: product.shapeImages?.nose
   }
-].filter((item) => item.description);
+]
+  .filter((item) => item.description)
+  .map((item) => ({
+    ...item,
+    image: item.image ?? product.images[0]?.main
+  }));
+const shapeFallback = [
+  {
+    key: 'outline',
+    title: 'Outline',
+    description: 'Détails du shape disponibles prochainement.',
+    image: product.images[0]?.main
+  },
+  {
+    key: 'carene-rails',
+    title: 'Carène & rails',
+    description: 'Détails du shape disponibles prochainement.',
+    image: product.images[0]?.main
+  },
+  {
+    key: 'tail',
+    title: 'Tail',
+    description: 'Détails du shape disponibles prochainement.',
+    image: product.images[0]?.main
+  },
+  {
+    key: 'nose',
+    title: 'Nose',
+    description: 'Détails du shape disponibles prochainement.',
+    image: product.images[0]?.main
+  }
+];
+const finalShapeItems = shapeItems.length ? shapeItems : shapeFallback;
 ---
 
 <Layout title={`AHD Paddle | ${product.name}`}>
@@ -150,31 +196,25 @@ const shapeItems = [
             </button>
           </div>
 
-          <p class="text-xs text-midnight/60">
-            Livraison gratuite dès 100€ d'achat
-          </p>
+     
         </div>
       </div>
 
       <!-- Description -->
-      {(product.programme || product.presentation) && (
+      {hasDescription && (
         <div class="mb-16 space-y-8">
           <h2 class="text-2xl font-semibold">Description</h2>
-          {product.programme && (
-            <div class="space-y-3">
-              <h3 class="font-semibold">Programme</h3>
-              <p class="text-midnight/70 leading-relaxed">{product.programme}</p>
-            </div>
-          )}
-          {product.presentation && (
-            <div class="space-y-3">
-              <h3 class="font-semibold">Présentation</h3>
-              <p class="text-midnight/70 leading-relaxed whitespace-pre-wrap">{product.presentation}</p>
-            </div>
-          )}
-          {product.descriptionImages && product.descriptionImages.length > 0 && (
+          <div class="space-y-3">
+            <h3 class="font-semibold">Programme</h3>
+            <p class="text-midnight/70 leading-relaxed">{descriptionProgramme}</p>
+          </div>
+          <div class="space-y-3">
+            <h3 class="font-semibold">Présentation</h3>
+            <p class="text-midnight/70 leading-relaxed whitespace-pre-wrap">{descriptionPresentation}</p>
+          </div>
+          {descriptionImages.length > 0 && (
             <div class="grid gap-6 md:grid-cols-2">
-              {product.descriptionImages.map((image, idx) => (
+              {descriptionImages.map((image, idx) => (
                 <div key={idx} class="overflow-hidden rounded-[2rem] shadow-[0_20px_40px_rgba(15,23,42,0.12)]">
                   <img src={image} alt={`${product.name} ambiance ${idx + 1}`} class="h-full w-full object-cover" loading="lazy" />
                 </div>
@@ -185,16 +225,16 @@ const shapeItems = [
       )}
 
       <!-- Shape -->
-      {shapeItems.length > 0 && (
+      {finalShapeItems.length > 0 && (
         <div class="mb-16 space-y-6">
           <h2 class="text-2xl font-semibold">Shape</h2>
           <div class="space-y-4">
-            {shapeItems.map((item, idx) => (
+            {finalShapeItems.map((item, idx) => (
               <details key={item.key} class="rounded-[2rem] border border-midnight/10 bg-white/70 p-6" open={idx === 0}>
                 <summary class="cursor-pointer list-none text-sm font-semibold uppercase tracking-[0.3em] text-midnight/70">
                   {item.title}
                 </summary>
-                <div class="mt-4 grid gap-6 md:grid-cols-[1.1fr_0.9fr]">
+                <div class="mt-4 space-y-4">
                   <p class="text-midnight/70 leading-relaxed whitespace-pre-wrap">{item.description}</p>
                   {item.image && (
                     <div class="flex items-center justify-center rounded-[1.5rem] bg-slate-50 p-4">
@@ -209,15 +249,15 @@ const shapeItems = [
       )}
 
       <!-- Performance -->
-      {product.performance && product.performance.length > 0 && (
-        <div class="mb-16 space-y-6">
-          <h2 class="text-2xl font-semibold">Performance</h2>
-          <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-            <div class="flex items-center justify-center rounded-[2.5rem] bg-slate-50 p-6">
-              <img src={product.images[0].main} alt={`${product.name} performance`} class="max-h-96 w-full object-contain" loading="lazy" />
-            </div>
-            <div class="space-y-4">
-              {product.performance.map(metric => (
+      <div class="mb-16 space-y-6">
+        <h2 class="text-2xl font-semibold">Performance</h2>
+        <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <div class="flex items-center justify-center rounded-[2.5rem] bg-slate-50 p-6">
+            <img src={product.images[0].main} alt={`${product.name} performance`} class="max-h-96 w-full object-contain" loading="lazy" />
+          </div>
+          <div class="space-y-4">
+            {hasPerformance ? (
+              performanceMetrics.map(metric => (
                 <div class="space-y-2">
                   <div class="flex justify-between text-sm">
                     <span class="font-semibold">{metric.label}</span>
@@ -227,36 +267,38 @@ const shapeItems = [
                     <div class="h-full bg-midnight rounded-full" style={`width: ${metric.level}%`}></div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      <!-- Technologie -->
-      {product.technology && (
-        <div class="mb-16 space-y-6">
-          <h2 class="text-2xl font-semibold">Technologie EPS PRO</h2>
-          <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center rounded-[2.5rem] border border-midnight/10 bg-slate-50 p-8">
-            <ul class="space-y-2 text-midnight/80 leading-relaxed text-sm">
-              {product.technology.split('\n').map((line, idx) => (
-                <li key={idx}>• {line.trim()}</li>
-              ))}
-            </ul>
-            {product.technologyImage && (
-              <div class="flex items-center justify-center rounded-[1.5rem] bg-white p-4">
-                <img src={product.technologyImage} alt="Technologie EPS PRO" class="max-h-64 w-full object-contain" loading="lazy" />
-              </div>
+              ))
+            ) : (
+              <p class="text-midnight/70 leading-relaxed">
+                Courbes de performance en cours de mise à jour.
+              </p>
             )}
           </div>
         </div>
-      )}
+      </div>
+
+      <!-- Technologie -->
+      <div class="mb-16 space-y-6">
+        <h2 class="text-2xl md:text-3xl font-semibold">Technologie EPS PRO</h2>
+        <div class="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+          <ul class="list-disc pl-5 space-y-3 text-midnight/80 leading-relaxed text-sm md:text-base">
+            {technologyLines.map((line, idx) => (
+              <li key={idx}>{line.trim()}</li>
+            ))}
+          </ul>
+          {product.technologyImage && (
+            <div class="flex items-center justify-center">
+              <img src={product.technologyImage} alt="Technologie EPS PRO" class="max-h-96 w-full object-contain" loading="lazy" />
+            </div>
+          )}
+        </div>
+      </div>
 
       <!-- Fiche technique -->
-      {product.specs && product.specs.length > 0 && (
-        <div class="mb-16 space-y-6">
-          <h2 class="text-2xl font-semibold">Fiche technique</h2>
-          {product.specs.map((spec, idx) => (
+      <div class="mb-16 space-y-6">
+        <h2 class="text-2xl font-semibold">Fiche technique</h2>
+        {product.specs && product.specs.length > 0 ? (
+          product.specs.map((spec, idx) => (
             <div key={idx} class="rounded-[2.5rem] border border-midnight/10 bg-white/70 p-8 overflow-x-auto">
               <h3 class="font-semibold mb-4">{spec.name}</h3>
               <table class="w-full text-sm">
@@ -270,9 +312,13 @@ const shapeItems = [
                 </tbody>
               </table>
             </div>
-          ))}
-        </div>
-      )}
+          ))
+        ) : (
+          <div class="rounded-[2.5rem] border border-midnight/10 bg-white/70 p-8 text-midnight/70">
+            Fiche technique en cours de mise à jour.
+          </div>
+        )}
+      </div>
 
       <!-- Produits connexes -->
       {relatedProducts.length > 0 && (
