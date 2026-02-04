@@ -1,0 +1,332 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { withBase } from '../../utils/url';
+import { getProductBySlug, getRelatedProducts, products } from '../../data/products';
+
+export function getStaticPaths() {
+  return products.map(product => ({
+    params: { slug: product.slug }
+  }));
+}
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.params;
+const product = getProductBySlug(slug!);
+
+if (!product) {
+  return Astro.redirect(withBase('/'));
+}
+
+const relatedProducts = getRelatedProducts(product);
+const shapeItems = [
+  {
+    key: 'outline',
+    title: 'Outline',
+    description: product.shapeDescriptions?.outline,
+    image: product.shapeImages?.outline
+  },
+  {
+    key: 'carene-rails',
+    title: 'Carène & rails',
+    description: product.shapeDescriptions?.careneRails,
+    image: product.shapeImages?.careneRails
+  },
+  {
+    key: 'tail',
+    title: 'Tail',
+    description: product.shapeDescriptions?.tail,
+    image: product.shapeImages?.tail
+  },
+  {
+    key: 'nose',
+    title: 'Nose',
+    description: product.shapeDescriptions?.nose,
+    image: product.shapeImages?.nose
+  }
+].filter((item) => item.description);
+---
+
+<Layout title={`AHD Paddle | ${product.name}`}>
+  <main class="bg-white pb-24" data-bg="#ffffff" data-nav="light">
+    <!-- Breadcrumb -->
+    <section class="container pt-28 md:pt-32 text-midnight">
+      <nav class="flex items-center gap-2 text-sm text-midnight/60 mb-12">
+        <a href={withBase('/')} class="font-medium text-midnight/70 hover:text-midnight">Accueil</a>
+        <span class="text-midnight/30">/</span>
+        <a href={withBase(`/${product.category}`)} class="font-medium text-midnight/70 hover:text-midnight capitalize">
+          {product.category === 'wingfoil' ? 'Wingfoil' : product.category === 'windsurf' ? 'Windsurf' : 'Accessoires'}
+        </a>
+        <span class="text-midnight/30">/</span>
+        <span class="text-midnight font-semibold">{product.name}</span>
+      </nav>
+
+      <!-- Produit principal -->
+      <div class="grid gap-12 md:grid-cols-2 mb-16">
+        <!-- Galerie d'images -->
+        <div class="space-y-4">
+          <div class="relative w-full aspect-[3/4] overflow-hidden rounded-[2.5rem] bg-gradient-to-b from-midnight/10 via-midnight/5 to-white">
+            <img 
+              id="mainImage"
+              src={product.images[0].main} 
+              alt={product.name}
+              class="h-full w-full object-contain"
+            />
+          </div>
+          {product.images.length > 1 && (
+            <div class="flex gap-3 overflow-x-auto pb-2">
+              {product.images.map((img, idx) => (
+                <button
+                  class="flex-shrink-0 w-16 h-20 rounded-lg border-2 border-midnight/10 overflow-hidden cursor-pointer transition hover:border-midnight thumbnail-btn"
+                  data-src={img.main}
+                  aria-label={`Image ${idx + 1}`}
+                >
+                  <img src={img.thumb} alt="" class="w-full h-full object-contain" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <!-- Infos produit -->
+        <div class="space-y-6">
+          <div>
+            <h1 class="text-3xl md:text-4xl font-semibold mb-2">{product.name}</h1>
+            <p class="text-midnight/70">{product.shortDescription}</p>
+          </div>
+
+          <!-- Taille -->
+          {product.sizes && product.sizes.length > 0 && (
+            <div class="space-y-3">
+              <label class="text-sm font-semibold text-midnight/70">Taille</label>
+              <select class="w-full md:w-32 rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight focus:border-midnight focus:outline-none">
+                <option>Sélectionner</option>
+                {product.sizes.map(size => (
+                  <option>{size}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <!-- Couleur -->
+          {product.variants && product.variants.length > 0 && (
+            <div class="space-y-3">
+              <label class="text-sm font-semibold text-midnight/70">Couleur</label>
+              <div class="flex gap-3">
+                {product.variants.map(variant => (
+                  <button
+                    class="w-8 h-8 rounded-lg border-2 border-midnight/20 transition hover:border-midnight cursor-pointer"
+                    style={`background-color: ${variant.colorHex}`}
+                    title={variant.color}
+                    aria-label={`Couleur: ${variant.color}`}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          <!-- Prix -->
+          <div class="border-t border-b border-midnight/10 py-6">
+            <p class="text-3xl font-semibold">{product.price}€</p>
+            <p class="text-xs text-midnight/60 mt-1">Taxes incluses</p>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex gap-3">
+            <div class="flex items-center border border-midnight/15 rounded-xl overflow-hidden">
+              <button class="px-3 py-2 text-sm hover:bg-midnight/5">-</button>
+              <input type="number" value="1" class="w-12 text-center border-none focus:outline-none" min="1" />
+              <button class="px-3 py-2 text-sm hover:bg-midnight/5">+</button>
+            </div>
+            <button class="flex-1 rounded-xl bg-midnight px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-white hover:bg-midnight/80 transition">
+              Ajouter au panier
+            </button>
+            <button class="px-4 py-3 rounded-xl border border-midnight/15 hover:border-midnight transition">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </button>
+          </div>
+
+          <p class="text-xs text-midnight/60">
+            Livraison gratuite dès 100€ d'achat
+          </p>
+        </div>
+      </div>
+
+      <!-- Description -->
+      {(product.programme || product.presentation) && (
+        <div class="mb-16 space-y-8">
+          <h2 class="text-2xl font-semibold">Description</h2>
+          {product.programme && (
+            <div class="space-y-3">
+              <h3 class="font-semibold">Programme</h3>
+              <p class="text-midnight/70 leading-relaxed">{product.programme}</p>
+            </div>
+          )}
+          {product.presentation && (
+            <div class="space-y-3">
+              <h3 class="font-semibold">Présentation</h3>
+              <p class="text-midnight/70 leading-relaxed whitespace-pre-wrap">{product.presentation}</p>
+            </div>
+          )}
+          {product.descriptionImages && product.descriptionImages.length > 0 && (
+            <div class="grid gap-6 md:grid-cols-2">
+              {product.descriptionImages.map((image, idx) => (
+                <div key={idx} class="overflow-hidden rounded-[2rem] shadow-[0_20px_40px_rgba(15,23,42,0.12)]">
+                  <img src={image} alt={`${product.name} ambiance ${idx + 1}`} class="h-full w-full object-cover" loading="lazy" />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      <!-- Shape -->
+      {shapeItems.length > 0 && (
+        <div class="mb-16 space-y-6">
+          <h2 class="text-2xl font-semibold">Shape</h2>
+          <div class="space-y-4">
+            {shapeItems.map((item, idx) => (
+              <details key={item.key} class="rounded-[2rem] border border-midnight/10 bg-white/70 p-6" open={idx === 0}>
+                <summary class="cursor-pointer list-none text-sm font-semibold uppercase tracking-[0.3em] text-midnight/70">
+                  {item.title}
+                </summary>
+                <div class="mt-4 grid gap-6 md:grid-cols-[1.1fr_0.9fr]">
+                  <p class="text-midnight/70 leading-relaxed whitespace-pre-wrap">{item.description}</p>
+                  {item.image && (
+                    <div class="flex items-center justify-center rounded-[1.5rem] bg-slate-50 p-4">
+                      <img src={item.image} alt={`${product.name} ${item.title}`} class="max-h-64 w-full object-contain" loading="lazy" />
+                    </div>
+                  )}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Performance -->
+      {product.performance && product.performance.length > 0 && (
+        <div class="mb-16 space-y-6">
+          <h2 class="text-2xl font-semibold">Performance</h2>
+          <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+            <div class="flex items-center justify-center rounded-[2.5rem] bg-slate-50 p-6">
+              <img src={product.images[0].main} alt={`${product.name} performance`} class="max-h-96 w-full object-contain" loading="lazy" />
+            </div>
+            <div class="space-y-4">
+              {product.performance.map(metric => (
+                <div class="space-y-2">
+                  <div class="flex justify-between text-sm">
+                    <span class="font-semibold">{metric.label}</span>
+                    <span class="text-midnight/60">{metric.level}%</span>
+                  </div>
+                  <div class="w-full h-2 bg-midnight/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-midnight rounded-full" style={`width: ${metric.level}%`}></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <!-- Technologie -->
+      {product.technology && (
+        <div class="mb-16 space-y-6">
+          <h2 class="text-2xl font-semibold">Technologie EPS PRO</h2>
+          <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center rounded-[2.5rem] border border-midnight/10 bg-slate-50 p-8">
+            <ul class="space-y-2 text-midnight/80 leading-relaxed text-sm">
+              {product.technology.split('\n').map((line, idx) => (
+                <li key={idx}>• {line.trim()}</li>
+              ))}
+            </ul>
+            {product.technologyImage && (
+              <div class="flex items-center justify-center rounded-[1.5rem] bg-white p-4">
+                <img src={product.technologyImage} alt="Technologie EPS PRO" class="max-h-64 w-full object-contain" loading="lazy" />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      <!-- Fiche technique -->
+      {product.specs && product.specs.length > 0 && (
+        <div class="mb-16 space-y-6">
+          <h2 class="text-2xl font-semibold">Fiche technique</h2>
+          {product.specs.map((spec, idx) => (
+            <div key={idx} class="rounded-[2.5rem] border border-midnight/10 bg-white/70 p-8 overflow-x-auto">
+              <h3 class="font-semibold mb-4">{spec.name}</h3>
+              <table class="w-full text-sm">
+                <tbody>
+                  {Object.entries(spec.specs).map(([key, value]) => (
+                    <tr key={key} class="border-b border-midnight/10">
+                      <td class="py-3 pr-4 font-semibold text-midnight/70">{key}</td>
+                      <td class="py-3 text-midnight font-semibold">{value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <!-- Produits connexes -->
+      {relatedProducts.length > 0 && (
+        <div class="space-y-6">
+          <h2 class="text-2xl font-semibold">Autres articles de la même catégorie</h2>
+          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {relatedProducts.map(relatedProduct => (
+              <a
+                href={withBase(`/produit/${relatedProduct.slug}`)}
+                class="group relative overflow-hidden rounded-[2.5rem] bg-white shadow-[0_24px_60px_rgba(15,23,42,0.08)] transition hover:shadow-[0_24px_60px_rgba(15,23,42,0.15)] hover:-translate-y-1"
+              >
+                <div class="relative w-full aspect-[3/4] overflow-hidden bg-gradient-to-b from-midnight/10 via-midnight/5 to-white">
+                  <img
+                    src={relatedProduct.images[0].main}
+                    alt={relatedProduct.name}
+                    class="h-full w-full object-contain transition-transform group-hover:scale-105"
+                  />
+                </div>
+                <div class="p-4 text-midnight">
+                  <h3 class="font-semibold text-sm mb-1">{relatedProduct.name}</h3>
+                  <p class="text-xs text-midnight/60 mb-2">{relatedProduct.shortDescription}</p>
+                  <p class="font-semibold">{relatedProduct.price}€</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </section>
+  </main>
+
+  <script type="module" is:inline>
+    const mainImage = document.getElementById('mainImage');
+    const thumbnailBtns = document.querySelectorAll('.thumbnail-btn');
+
+    thumbnailBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const src = btn.dataset.src;
+        if (mainImage && src) {
+          mainImage.src = src;
+        }
+        thumbnailBtns.forEach(b => b.classList.remove('border-midnight'));
+        btn.classList.add('border-midnight');
+      });
+    });
+
+    const nav = document.getElementById('ahd-global-nav');
+    if (nav) {
+      nav.classList.add('nav-dark');
+      nav.classList.remove('nav-light');
+      nav.style.setProperty('--nav-bg', 'rgba(1, 1, 4, 0.65)');
+      nav.style.setProperty('--nav-border', 'rgba(255, 255, 255, 0.15)');
+      nav.style.setProperty('--nav-foreground', 'rgba(255, 255, 255, 0.92)');
+      nav.style.setProperty('--nav-hover', '#ffffff');
+    }
+  </script>
+</Layout>

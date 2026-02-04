@@ -25,6 +25,7 @@ const facets = [
 
 const boards = [
   {
+    slug: 'compact-foil',
     name: 'Compact Foil',
     description: 'Prise en main immédiate, parfaite pour progresser en wing foil.',
     volume: '75 L',
@@ -32,6 +33,7 @@ const boards = [
     image: withBase('/images/boards/ahd-compact-foil.png')
   },
   {
+    slug: 'fury-wing',
     name: 'Fury Wing',
     description: 'Carène tendue et rails affutés pour les riders à la recherche de vitesse.',
     volume: '88 L',
@@ -39,6 +41,7 @@ const boards = [
     image: withBase('/images/boards/ahd-fury.png')
   },
   {
+    slug: 'u-surf-foil',
     name: 'U-Surf Foil',
     description: 'Hyper compacte, elle maximise la maniabilité dans les vagues.',
     volume: '60 L',
@@ -46,6 +49,7 @@ const boards = [
     image: withBase('/images/boards/ahd-zen.png')
   },
   {
+    slug: 'sky-rider',
     name: 'Sky Rider',
     description: 'Stabilité longitudinale accrue pour décoller tôt et rester en vol.',
     volume: '100 L',
@@ -121,9 +125,9 @@ const boards = [
                   <span class="font-semibold text-midnight">{board.price}</span>
                   <span class="text-midnight/60">{board.volume}</span>
                 </div>
-                <button class="mt-4 inline-flex items-center justify-center rounded-full border border-midnight/20 px-4 py-2 text-xs uppercase tracking-[0.3em] text-midnight/70 transition-colors duration-200 hover:border-midnight hover:text-midnight">
+                <a href={withBase(`/produit/${board.slug}`)} class="mt-4 inline-flex items-center justify-center rounded-full border border-midnight/20 px-4 py-2 text-xs uppercase tracking-[0.3em] text-midnight/70 transition-colors duration-200 hover:border-midnight hover:text-midnight">
                   Voir la fiche
-                </button>
+                </a>
               </div>
             </article>
           ))}

@@ -26,9 +26,11 @@ const historyImage = withBase('/images/ahd-history.png');
       <p class="tint-section__copy text-base md:text-lg leading-relaxed">
         Aujourd’hui encore, nos ateliers fabriquent à la main des planches pensées pour les riders passionnés de vitesse, de foil et d’exploration, accompagnés par Foil&co.
       </p>
-      <p-button variant="secondary" class="outline-flip">
-        À propos
-      </p-button>
+      <a href={withBase('/apropos')} class="inline-block">
+        <p-button variant="secondary" class="outline-flip">
+          À propos
+        </p-button>
+      </a>
     </div>
     <div class="overflow-hidden rounded-[2.5rem] shadow-glow">
       <img src={historyImage} alt="Historique AHD" class="h-full w-full object-cover" loading="lazy" />
