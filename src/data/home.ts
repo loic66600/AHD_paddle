@@ -25,14 +25,14 @@ export const categories = [
 
 export const lineup = [
   {
-    name: 'Fury',
-    description: 'Planche de freeride ultime, nerveuse et confortable sur tous les plans d’eau.',
+    name: 'Fury',    slug: 'fury',    description: 'Planche de freeride ultime, nerveuse et confortable sur tous les plans d’eau.',
     price: '549 €',
     image: withBase('/images/boards/ahd-fury.png'),
     discipline: 'Freeride signature'
   },
   {
     name: 'SL-S',
+    slug: 'sls',
     description: 'La référence slalom : accélération immédiate et contrôle dans le chantier.',
     price: '549 €',
     image: withBase('/images/boards/AHD_SLS.png'),
@@ -40,14 +40,14 @@ export const lineup = [
   },
   {
     name: 'Compact Foil',
+    slug: 'compact-foil',
     description: 'Shape compact et portance précoce pour voler en vent médium dès 12 nœuds.',
     price: '549 €',
     image: withBase('/images/boards/ahd-compact-foil.png'),
     discipline: 'Foil performance'
   },
   {
-    name: 'Zen',
-    description: 'Glisse fluide et stabilité active : l’arme parfaite pour progresser en freeride.',
+    name: 'Zen',    slug: 'zen',    description: 'Glisse fluide et stabilité active : l’arme parfaite pour progresser en freeride.',
     price: '549 €',
     image: withBase('/images/boards/ahd-zen.png'),
     discipline: 'Progression'

@@ -20,8 +20,8 @@ const menuItems = [
 ---
 
 <div class="relative">
-	<input id="ahd-drawer-toggle" type="checkbox" class="peer sr-only" aria-hidden="true" />
-	<input id="ahd-account-toggle" type="checkbox" class="peer/account sr-only" aria-hidden="true" />
+	<input id="ahd-drawer-toggle" type="checkbox" class="peer sr-only" />
+	<input id="ahd-account-toggle" type="checkbox" class="peer/account sr-only" />
 
 	<!-- Navigation principale avec menu fixe -->
 	<header
@@ -299,6 +299,7 @@ const menuItems = [
 
 	<label
 		for="ahd-drawer-toggle"
+		id="ahd-drawer-overlay"
 		class="fixed inset-0 z-40 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 peer-checked:opacity-100 peer-checked:pointer-events-auto"
 		aria-hidden="true"
 	></label>
@@ -309,10 +310,9 @@ const menuItems = [
 		aria-hidden="true"
 	></label>
 
-	<script type="module" is:inline>
+	<script type="module" is:inline define:vars={{accountPage}}>
 		const drawerToggle = document.getElementById('ahd-drawer-toggle');
 		const drawer = document.getElementById('ahd-drawer');
-		const drawerLinks = document.querySelectorAll('#ahd-drawer a');
 		const menuButton = document.getElementById('ahd-menu-button');
 		const accountToggle = document.getElementById('ahd-account-toggle');
 		const accountButton = document.getElementById('ahd-account-button');
@@ -323,7 +323,7 @@ const menuItems = [
 		const signupModalClose = document.querySelector('[data-signup-close]');
 		const accountPanel = document.getElementById('ahd-account-panel');
 		const docEl = document.documentElement;
-		const accountPageUrl = ${JSON.stringify(accountPage)};
+		const accountPageUrl = accountPage;
 		const accountStorageKey = 'ahd-account-active';
 		
 		const getStorage = () => {
@@ -382,19 +382,103 @@ const menuItems = [
 			syncAccountState();
 		}
 
-		if (drawerToggle && drawerLinks.length) {
-			const closeMenu = () => {
+		// Gestion des clics sur les liens du drawer
+		const closeMenu = () => {
+			console.log('🔴 Closing menu...');
+			if (drawerToggle) {
 				drawerToggle.checked = false;
-				if (menuButton) {
-					menuButton.setAttribute('aria-expanded', 'false');
-				}
-				if (drawer) {
-					drawer.classList.remove('submenu-active');
-				}
+				console.log('✅ Drawer toggle unchecked');
+			}
+			if (menuButton) {
+				menuButton.setAttribute('aria-expanded', 'false');
+			}
+			if (drawer) {
+				drawer.classList.remove('submenu-active');
+			}
+		};
+
+		// Observer pour les changements dans le drawer (sous-menu)
+		if (drawer) {
+			const setupLinkHandlers = () => {
+				const allLinks = drawer.querySelectorAll('a');
+				console.log('🔗 Setting up handlers for', allLinks.length, 'links');
+				
+				allLinks.forEach((link, index) => {
+					const href = link.getAttribute('href');
+					console.log(`📎 Link ${index}: ${href} - ${link.textContent.trim()}`);
+					
+					// Supprimer l'ancien handler pour éviter les doublons
+					link.removeEventListener('click', link._clickHandler);
+					
+					// Créer le nouveau handler
+					const clickHandler = (e) => {
+						console.log('🖱️ Clicked on link:', href, 'Current page:', window.location.pathname);
+						
+						// Pour les liens d'ancrage locaux
+						if (href && href.startsWith('#')) {
+							e.preventDefault();
+							console.log('🎯 Anchor link detected, closing menu...');
+							closeMenu();
+							
+							setTimeout(() => {
+								const targetId = href.substring(1);
+								const targetEl = document.getElementById(targetId);
+								console.log('📍 Looking for element:', targetId, 'Found:', !!targetEl);
+								if (targetEl) {
+									targetEl.scrollIntoView({ behavior: 'smooth' });
+									console.log('📜 Scrolled to element');
+								}
+							}, 250);
+						} else if (href && href.includes('#')) {
+							// Pour les liens avec ancrage vers d'autres pages (comme /#gamme)
+							console.log('🔗 Cross-page anchor link detected');
+							closeMenu();
+						} else {
+							// Pour tous les autres liens
+							console.log('🔗 Regular link, closing menu');
+							closeMenu();
+						}
+					};
+					
+					// Sauvegarder la référence du handler
+					link._clickHandler = clickHandler;
+					link.addEventListener('click', clickHandler);
+				});
 			};
 
-			drawerLinks.forEach((link) => {
-				link.addEventListener('click', closeMenu);
+			// Setup initial
+			console.log('🚀 Initial setup of link handlers');
+			setupLinkHandlers();
+
+			// Observer pour les changements DOM (sous-menu qui apparaît/disparaît)
+			const observer = new MutationObserver((mutations) => {
+				let hasChanges = false;
+				mutations.forEach(mutation => {
+					if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+						hasChanges = true;
+					}
+				});
+				if (hasChanges) {
+					console.log('🔄 DOM changed, re-setting up handlers...');
+					setTimeout(setupLinkHandlers, 50);
+				}
+			});
+			
+			observer.observe(drawer, { 
+				childList: true, 
+				subtree: true,
+				attributes: true,
+				attributeFilter: ['class']
+			});
+		}
+
+		// Fermer le menu en cliquant sur l'overlay
+		const overlay = document.getElementById('ahd-drawer-overlay');
+		if (overlay) {
+			overlay.addEventListener('click', (e) => {
+				e.preventDefault();
+				console.log('🖱️ Clicked on overlay, closing menu');
+				closeMenu();
 			});
 		}
 
