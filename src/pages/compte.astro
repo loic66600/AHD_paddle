@@ -3,190 +3,253 @@ import Layout from '../layouts/Layout.astro';
 import { withBase } from '../utils/url';
 ---
 
-<Layout title="AHD Paddle | Mon compte">
-  <main class="bg-white pb-24" data-bg="#ffffff" data-nav="light">
-    <section class="container pt-28 md:pt-32 text-midnight">
-      <div class="mx-auto flex w-full max-w-3xl flex-col gap-10">
-        <div class="space-y-4 text-center">
-          <p class="text-xs font-semibold uppercase tracking-[0.35em] text-midnight/60">Mon compte</p>
-          <h1 class="text-3xl md:text-4xl font-semibold">Coordonnées personnelles</h1>
-          <p class="text-sm md:text-base text-midnight/60">
-            Renseignez vos informations. Vous pourrez les modifier à tout moment.
-          </p>
-          <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <a
-              href={withBase('/commandes')}
-              class="rounded-full border border-midnight/20 px-5 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-midnight/70 transition hover:border-midnight hover:text-midnight"
+<Layout title="AHD Paddle | Mon Compte" showFooter={false}>
+  <main class="bg-white min-h-screen" data-bg="#ffffff" data-nav="light">
+    <section class="min-h-screen pt-28 md:pt-32">
+      <div class="max-w-4xl mx-auto px-4 sm:px-8 md:px-12 py-12">
+        <div class="text-center mb-12">
+          <h1 class="text-3xl md:text-4xl font-semibold text-midnight mb-4">Mon Compte</h1>
+          <p class="text-midnight/70">Gérez vos informations et commandes</p>
+        </div>
+
+        <!-- Informations du compte -->
+        <div class="bg-white rounded-2xl border border-midnight/10 p-6 md:p-8 mb-8">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-midnight">Informations personnelles</h2>
+            <button
+              type="button"
+              id="edit-profile-btn"
+              class="text-sm text-midnight underline hover:text-midnight/70"
             >
-              Toutes mes commandes
-            </a>
-            <a
-              href={withBase('/')}
-              class="rounded-full border border-midnight/20 px-5 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-midnight/70 transition hover:border-midnight hover:text-midnight"
+              Modifier
+            </button>
+          </div>
+
+          <form id="profile-form" class="space-y-4">
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label for="profile-firstname" class="text-xs font-semibold text-midnight/70">Prénom</label>
+                <input
+                  id="profile-firstname"
+                  type="text"
+                  placeholder="Prénom"
+                  disabled
+                  class="w-full rounded-xl border border-midnight/15 bg-slate-50 px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none disabled:opacity-50"
+                />
+              </div>
+              <div class="space-y-2">
+                <label for="profile-lastname" class="text-xs font-semibold text-midnight/70">Nom</label>
+                <input
+                  id="profile-lastname"
+                  type="text"
+                  placeholder="Nom"
+                  disabled
+                  class="w-full rounded-xl border border-midnight/15 bg-slate-50 px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none disabled:opacity-50"
+                />
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label for="profile-email" class="text-xs font-semibold text-midnight/70">E-mail</label>
+              <input
+                id="profile-email"
+                type="email"
+                placeholder="E-mail"
+                disabled
+                class="w-full rounded-xl border border-midnight/15 bg-slate-50 px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none disabled:opacity-50"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label for="profile-phone" class="text-xs font-semibold text-midnight/70">Téléphone</label>
+              <input
+                id="profile-phone"
+                type="tel"
+                placeholder="Téléphone"
+                disabled
+                class="w-full rounded-xl border border-midnight/15 bg-slate-50 px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none disabled:opacity-50"
+              />
+            </div>
+
+            <button
+              id="save-profile-btn"
+              type="submit"
+              class="hidden mt-4 w-full rounded-full bg-midnight px-5 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-white hover:bg-midnight/90"
             >
-              Retour à l’accueil
-            </a>
+              Sauvegarder
+            </button>
+          </form>
+        </div>
+
+        <!-- Mes commandes -->
+        <div class="bg-white rounded-2xl border border-midnight/10 p-6 md:p-8 mb-8">
+          <h2 class="text-xl font-semibold text-midnight mb-6">Mes commandes</h2>
+          <div id="orders-list" class="space-y-4">
+            <p class="text-sm text-midnight/60 text-center py-8">Aucune commande pour le moment</p>
           </div>
         </div>
 
-        <form class="space-y-8 rounded-[2.5rem] border border-midnight/10 bg-white/70 p-8 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
-          <div class="grid gap-6 md:grid-cols-2">
-            <div class="space-y-2">
-              <label for="account-firstname" class="text-xs font-semibold text-midnight/70">Prénom</label>
-              <input
-                id="account-firstname"
-                type="text"
-                placeholder="Votre prénom"
-                class="w-full rounded-full border border-midnight/20 bg-slate-50 px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
-              />
-            </div>
-            <div class="space-y-2">
-              <label for="account-lastname" class="text-xs font-semibold text-midnight/70">Nom</label>
-              <input
-                id="account-lastname"
-                type="text"
-                placeholder="Votre nom"
-                class="w-full rounded-full border border-midnight/20 bg-slate-50 px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
-              />
-            </div>
-          </div>
-
-          <div class="grid gap-6 md:grid-cols-2">
-            <div class="space-y-2">
-              <label for="account-email-main" class="text-xs font-semibold text-midnight/70">E-mail</label>
-              <input
-                id="account-email-main"
-                type="email"
-                placeholder="email@exemple.com"
-                class="w-full rounded-full border border-midnight/20 bg-slate-50 px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
-              />
-            </div>
-            <div class="space-y-2">
-              <label for="account-phone" class="text-xs font-semibold text-midnight/70">Téléphone</label>
-              <input
-                id="account-phone"
-                type="tel"
-                placeholder="+33 6 12 34 56 78"
-                class="w-full rounded-full border border-midnight/20 bg-slate-50 px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
-              />
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <label for="account-address" class="text-xs font-semibold text-midnight/70">Adresse</label>
-            <input
-              id="account-address"
-              type="text"
-              placeholder="Adresse et complément"
-              class="w-full rounded-full border border-midnight/20 bg-slate-50 px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
-            />
-          </div>
-
-          <div class="grid gap-6 md:grid-cols-3">
-            <div class="space-y-2">
-              <label for="account-zip" class="text-xs font-semibold text-midnight/70">Code postal</label>
-              <input
-                id="account-zip"
-                type="text"
-                placeholder="Code postal"
-                class="w-full rounded-full border border-midnight/20 bg-slate-50 px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
-              />
-            </div>
-            <div class="space-y-2">
-              <label for="account-city" class="text-xs font-semibold text-midnight/70">Ville</label>
-              <input
-                id="account-city"
-                type="text"
-                placeholder="Ville"
-                class="w-full rounded-full border border-midnight/20 bg-slate-50 px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
-              />
-            </div>
-            <div class="space-y-2">
-              <label for="account-country" class="text-xs font-semibold text-midnight/70">Pays</label>
-              <input
-                id="account-country"
-                type="text"
-                placeholder="Pays"
-                class="w-full rounded-full border border-midnight/20 bg-slate-50 px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
-              />
-            </div>
-          </div>
-
-          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <p class="text-xs text-midnight/50">Vous pourrez modifier ces informations plus tard.</p>
-            <button
-              type="submit"
-              class="rounded-full bg-midnight px-6 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-white"
-            >
-              Enregistrer
-            </button>
-          </div>
-        </form>
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a
+            href={withBase('/')}
+            class="flex-1 text-center rounded-full border border-midnight/20 px-5 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-midnight hover:border-midnight/40"
+          >
+            Continuer mes achats
+          </a>
+          <button
+            id="logout-btn"
+            type="button"
+            class="flex-1 rounded-full bg-red-600 px-5 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-white hover:bg-red-700"
+          >
+            Déconnexion
+          </button>
+        </div>
       </div>
     </section>
-  </main>
 
-  <script type="module" is:inline>
-    const nav = document.getElementById('ahd-global-nav');
-    if (nav) {
-      nav.classList.add('nav-dark');
-      nav.classList.remove('nav-light');
-      nav.style.setProperty('--nav-bg', 'rgba(1, 1, 4, 0.65)');
-      nav.style.setProperty('--nav-border', 'rgba(255, 255, 255, 0.15)');
-      nav.style.setProperty('--nav-foreground', 'rgba(255, 255, 255, 0.92)');
-      nav.style.setProperty('--nav-hover', '#ffffff');
-    }
-
-    // Récupérer et pré-remplir les données d'inscription
-    const getStorage = () => {
-      try {
-        return window.localStorage;
-      } catch (error) {
-        return null;
+    <script type="module" is:inline>
+      const nav = document.getElementById('ahd-global-nav');
+      if (nav) {
+        nav.classList.add('nav-dark');
+        nav.classList.remove('nav-light');
+        nav.style.setProperty('--nav-bg', 'rgba(1, 1, 4, 0.65)');
+        nav.style.setProperty('--nav-border', 'rgba(255, 255, 255, 0.15)');
+        nav.style.setProperty('--nav-foreground', 'rgba(255, 255, 255, 0.92)');
+        nav.style.setProperty('--nav-hover', '#ffffff');
       }
-    };
 
-    const loadUserData = () => {
-      const storage = getStorage();
-      if (!storage) return;
-
-      // Récupérer les données temporaires d'inscription
-      const signupData = storage.getItem('ahd-signup-data');
-      if (signupData) {
+      const getStorage = () => {
         try {
-          const data = JSON.parse(signupData);
-          console.log('📄 Loading signup data:', data);
-          
-          // Pré-remplir les champs
-          const firstnameInput = document.getElementById('account-firstname');
-          const lastnameInput = document.getElementById('account-lastname');
-          const emailInput = document.getElementById('account-email');
-          
-          if (firstnameInput && data.firstname) {
-            firstnameInput.value = data.firstname;
-            console.log('✅ Firstname filled:', data.firstname);
-          }
-          if (lastnameInput && data.lastname) {
-            lastnameInput.value = data.lastname;
-            console.log('✅ Lastname filled:', data.lastname);
-          }
-          if (emailInput && data.email) {
-            emailInput.value = data.email;
-            console.log('✅ Email filled:', data.email);
-          }
-          
-          // Nettoyer les données temporaires après usage
-          storage.removeItem('ahd-signup-data');
-          console.log('🧹 Temporary signup data cleaned');
+          return window.localStorage;
         } catch (error) {
-          console.error('❌ Error loading signup data:', error);
+          return null;
         }
-      } else {
-        console.log('ℹ️ No signup data found - direct page access');
-      }
-    };
+      };
 
-    // Charger les données au chargement de la page
-    document.addEventListener('DOMContentLoaded', loadUserData);
-  </script>
+      const accountStorageKey = 'ahd-account-active';
+      const storage = getStorage();
+
+      // Rediriger si pas connecté
+      if (!storage || storage.getItem(accountStorageKey) !== 'true') {
+        window.location.href = window.location.pathname.includes('AHD_paddle') ? '/AHD_paddle/' : '/';
+      }
+
+      // Charger les données du compte
+      const loadAccountData = () => {
+        const signupDataStr = storage?.getItem('ahd-signup-data');
+        if (signupDataStr) {
+          try {
+            const signupData = JSON.parse(signupDataStr);
+            const firstnameInput = document.getElementById('profile-firstname');
+            const lastnameInput = document.getElementById('profile-lastname');
+            const emailInput = document.getElementById('profile-email');
+
+            if (firstnameInput) firstnameInput.value = signupData.firstname || '';
+            if (lastnameInput) lastnameInput.value = signupData.lastname || '';
+            if (emailInput) emailInput.value = signupData.email || '';
+          } catch (error) {
+            console.error('Error loading account data:', error);
+          }
+        }
+      };
+
+      loadAccountData();
+
+      // Bouton d'édition
+      const editBtn = document.getElementById('edit-profile-btn');
+      const saveBtn = document.getElementById('save-profile-btn');
+      const form = document.getElementById('profile-form');
+      const inputs = form?.querySelectorAll('input');
+
+      editBtn?.addEventListener('click', () => {
+        inputs?.forEach(input => {
+          input.disabled = false;
+          input.classList.remove('disabled:opacity-50');
+        });
+        saveBtn?.classList.remove('hidden');
+        editBtn.textContent = 'Annuler';
+        editBtn.onclick = () => {
+          inputs?.forEach(input => input.disabled = true);
+          saveBtn?.classList.add('hidden');
+          editBtn.textContent = 'Modifier';
+          editBtn.onclick = null;
+          loadAccountData();
+        };
+      });
+
+      // Sauvegarder les modifications
+      form?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const firstnameInput = document.getElementById('profile-firstname');
+        const lastnameInput = document.getElementById('profile-lastname');
+        const emailInput = document.getElementById('profile-email');
+        const phoneInput = document.getElementById('profile-phone');
+
+        const updatedData = {
+          firstname: firstnameInput?.value || '',
+          lastname: lastnameInput?.value || '',
+          email: emailInput?.value || '',
+          phone: phoneInput?.value || '',
+          timestamp: new Date().toISOString()
+        };
+
+        storage?.setItem('ahd-signup-data', JSON.stringify(updatedData));
+        
+        inputs?.forEach(input => input.disabled = true);
+        saveBtn?.classList.add('hidden');
+        editBtn.textContent = 'Modifier';
+        editBtn.onclick = null;
+
+        alert('✅ Profil mis à jour avec succès !');
+      });
+
+      // Déconnexion
+      const logoutBtn = document.getElementById('logout-btn');
+      logoutBtn?.addEventListener('click', () => {
+        if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
+          storage?.removeItem(accountStorageKey);
+          storage?.removeItem('ahd-signup-data');
+          window.location.href = window.location.pathname.includes('AHD_paddle') ? '/AHD_paddle/' : '/';
+        }
+      });
+
+      // Charger les commandes Snipcart
+      const loadOrders = () => {
+        if (window.Snipcart && window.Snipcart.api && window.Snipcart.api.orders) {
+          window.Snipcart.api.orders.all().then((orders) => {
+            const ordersList = document.getElementById('orders-list');
+            if (orders && orders.length > 0 && ordersList) {
+              ordersList.innerHTML = orders.map(order => `
+                <div class="border border-midnight/10 rounded-xl p-4">
+                  <div class="flex justify-between items-start mb-2">
+                    <div>
+                      <p class="text-sm font-semibold text-midnight">Commande #${order.invoiceNumber}</p>
+                      <p class="text-xs text-midnight/60">${new Date(order.creationDate).toLocaleDateString('fr-FR')}</p>
+                    </div>
+                    <p class="text-sm font-semibold text-midnight">${(order.total).toFixed(2)} €</p>
+                  </div>
+                  <p class="text-xs text-midnight/70">${order.items.length} article(s)</p>
+                </div>
+              `).join('');
+            }
+          }).catch((error) => {
+            console.log('No orders found or error:', error);
+          });
+        }
+      };
+
+      // Attendre Snipcart et charger les commandes
+      const waitForSnipcart = () => {
+        if (window.Snipcart && window.Snipcart.api) {
+          loadOrders();
+        } else {
+          setTimeout(waitForSnipcart, 500);
+        }
+      };
+
+      setTimeout(waitForSnipcart, 1000);
+    </script>
+  </main>
 </Layout>

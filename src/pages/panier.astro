@@ -10,6 +10,17 @@ import { withBase } from '../utils/url';
         <!-- Colonne gauche : formulaire -->
         <div class="order-1 w-full bg-white px-4 pb-16 pt-8 sm:px-8 md:px-12 lg:px-16 md:h-[calc(100vh-8rem)] md:overflow-y-auto md:flex-none md:basis-[45%]">
           <div class="mx-auto w-full max-w-2xl space-y-10 text-midnight">
+            <!-- Lien retour vers boutique -->
+            <a 
+              href={withBase('/')} 
+              class="inline-flex items-center gap-2 text-sm text-midnight/70 hover:text-midnight transition"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+              <span>Continuer mes achats</span>
+            </a>
+            
             <div class="space-y-4">
               <h1 class="text-xl sm:text-2xl md:text-3xl font-semibold">Contact</h1>
               <div class="space-y-3">
@@ -74,7 +85,7 @@ import { withBase } from '../utils/url';
             <div class="space-y-4">
               <h2 class="text-lg sm:text-xl font-semibold">Mode d'expédition</h2>
               <div class="rounded-xl border border-midnight/15 bg-white px-4 py-4 text-sm text-midnight/70">
-                Saisir une adresse d’expédition pour voir les options disponibles.
+                Saisir une adresse d'expédition pour voir les options disponibles.
               </div>
             </div>
 
@@ -103,7 +114,7 @@ import { withBase } from '../utils/url';
                   <div class="grid gap-3 md:grid-cols-2">
                     <input
                       type="text"
-                      placeholder="Date d’expiration (MM/AA)"
+                      placeholder="Date d'expiration (MM/AA)"
                       class="w-full rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
                     />
                     <input
@@ -119,7 +130,7 @@ import { withBase } from '../utils/url';
                   />
                   <label class="flex items-center gap-3 text-sm text-midnight/70">
                     <input type="checkbox" class="h-4 w-4 rounded border-midnight/30 text-midnight" checked />
-                    Utiliser l’adresse d’expédition comme adresse de facturation
+                    Utiliser l'adresse d'expédition comme adresse de facturation
                   </label>
                 </div>
                 <div class="border-t border-midnight/10 px-4 py-3">
@@ -163,49 +174,35 @@ import { withBase } from '../utils/url';
           </div>
         </div>
 
-        <!-- Colonne droite : récapitulatif -->
+        <!-- Colonne droite : panier Snipcart -->
         <div class="order-2 w-full bg-[#f5f5f5] px-4 pb-16 pt-8 sm:px-8 md:px-12 lg:px-14 md:flex-none md:basis-[45%]">
-          <div class="mx-auto w-full max-w-md space-y-8 text-midnight md:sticky md:top-28">
-            <div class="flex items-center gap-4 rounded-2xl bg-white px-4 py-3 shadow-[0_16px_30px_rgba(15,23,42,0.08)]">
-              <div class="relative h-16 w-16 overflow-hidden rounded-lg bg-slate-100">
-                <img src={withBase('/images/boards/ahd-compact-foil.png')} alt="Produit" class="h-full w-full object-contain" />
-                <span class="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-midnight text-xs text-white">1</span>
-              </div>
-              <div class="flex-1 text-sm">
-                <p class="font-semibold">Pack AHD Wing Set</p>
-                <p class="text-xs text-midnight/60">Compact Foil / 75L</p>
-              </div>
-              <p class="text-sm font-semibold">888,00 €</p>
+          <div id="cart-container" class="mx-auto w-full max-w-md space-y-6 text-midnight md:sticky md:top-28">
+            <div id="empty-cart-message" class="text-center py-8">
+              <p class="text-midnight/70 mb-4">Votre panier est vide</p>
+              <a href={withBase('/')} class="text-sm text-midnight underline">Continuer vos achats</a>
             </div>
-
-            <div class="flex gap-3">
-              <input
-                type="text"
-                placeholder="Code de réduction ou carte-cadeau"
-                class="flex-1 rounded-xl border border-midnight/15 bg-white px-4 py-3 text-sm text-midnight placeholder:text-midnight/40 focus:border-midnight focus:outline-none"
-              />
-              <button type="button" class="rounded-xl border border-midnight/20 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-midnight/70">
-                Valider
-              </button>
-            </div>
-
-            <div class="space-y-3 text-sm">
+            <div id="cart-items" class="space-y-4"></div>
+            <div id="cart-summary" class="hidden space-y-3 border-t border-midnight/10 pt-4">
               <div class="flex items-center gap-6">
                 <span class="w-40 text-midnight/70">Sous-total</span>
-                <span>888,00 €</span>
+                <span id="subtotal">0,00 €</span>
               </div>
               <div class="flex items-center gap-6">
-                <span class="w-40 text-midnight/70">Frais d’expédition</span>
-                <span class="text-midnight/50">Saisir une adresse d’expédition</span>
+                <span class="w-40 text-midnight/70">Frais d'expédition</span>
+                <span class="text-midnight/50">Saisir une adresse</span>
               </div>
-            </div>
-
-            <div class="border-t border-midnight/10 pt-4">
-              <div class="flex items-center gap-6 text-base font-semibold">
-                <span class="w-40">Total</span>
-                <span>888,00 €</span>
+              <div class="border-t border-midnight/10 pt-4">
+                <div class="flex items-center gap-6 text-base font-semibold">
+                  <span class="w-40">Total</span>
+                  <span id="total">0,00 €</span>
+                </div>
               </div>
-              <p class="mt-2 text-xs text-midnight/60">Taxes incluses.</p>
+              <a 
+                href={withBase('/')} 
+                class="block text-center mt-4 text-sm text-midnight underline hover:text-midnight/70 transition"
+              >
+                Continuer mes achats
+              </a>
             </div>
           </div>
         </div>
@@ -217,20 +214,114 @@ import { withBase } from '../utils/url';
         <a href={withBase('/')} class="text-midnight underline underline-offset-2">Politique de remboursement</a>
         <a href={withBase('/')} class="text-midnight underline underline-offset-2">Expédition</a>
         <a href={withBase('/')} class="text-midnight underline underline-offset-2">Politique de confidentialité</a>
-        <a href={withBase('/')} class="text-midnight underline underline-offset-2">Conditions d’utilisation</a>
+        <a href={withBase('/')} class="text-midnight underline underline-offset-2">Conditions d'utilisation</a>
         <a href={withBase('/')} class="text-midnight underline underline-offset-2">Mentions légales</a>
       </div>
     </div>
+
     <script type="module" is:inline>
       const nav = document.getElementById('ahd-global-nav');
       if (nav) {
         nav.classList.add('nav-dark');
         nav.classList.remove('nav-light');
-        nav.style.setProperty('--nav-bg', 'rgba(1, 1, 4, 0.65)');
-        nav.style.setProperty('--nav-border', 'rgba(255, 255, 255, 0.15)');
-        nav.style.setProperty('--nav-foreground', 'rgba(255, 255, 255, 0.92)');
+        nav.style.setProperty('--nav-bg', 'rgba(1, 1, 4, 0.95)');
+        nav.style.setProperty('--nav-border', 'rgba(255, 255, 255, 0.2)');
+        nav.style.setProperty('--nav-foreground', 'rgba(255, 255, 255, 0.95)');
         nav.style.setProperty('--nav-hover', '#ffffff');
       }
+
+      // Affichage dynamique du panier
+      const updateCartDisplay = () => {
+        const emptyMessage = document.getElementById('empty-cart-message');
+        const cartItems = document.getElementById('cart-items');
+        const cartSummary = document.getElementById('cart-summary');
+        const subtotalEl = document.getElementById('subtotal');
+        const totalEl = document.getElementById('total');
+
+        // Essayer d'abord Snipcart
+        if (window.Snipcart && window.Snipcart.store) {
+          try {
+            const state = window.Snipcart.store.getState();
+            const items = state.cart.items || [];
+            
+            if (items.length === 0) {
+              emptyMessage.classList.remove('hidden');
+              cartItems.innerHTML = '';
+              cartSummary.classList.add('hidden');
+            } else {
+              emptyMessage.classList.add('hidden');
+              cartSummary.classList.remove('hidden');
+
+              // Afficher les articles
+              let html = '';
+              items.forEach((item) => {
+                const itemPrice = (item.price * item.quantity / 100).toFixed(2);
+                const itemImage = item.image || '';
+                const itemName = item.name || 'Produit';
+                const itemDesc = item.description || '';
+                const itemQty = item.quantity || 1;
+                
+                html += '<div class="flex items-center gap-3 rounded-xl border border-midnight/10 bg-white p-3">';
+                html += '<div class="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-slate-100">';
+                if (itemImage) {
+                  html += '<img src="' + itemImage + '" alt="' + itemName + '" class="h-full w-full object-contain" />';
+                }
+                html += '</div>';
+                html += '<div class="flex-1 min-w-0">';
+                html += '<p class="font-semibold text-sm truncate">' + itemName + '</p>';
+                html += '<p class="text-xs text-midnight/60">' + itemDesc + '</p>';
+                html += '<p class="text-xs font-semibold mt-1">Qty: ' + itemQty + '</p>';
+                html += '</div>';
+                html += '<p class="text-sm font-semibold flex-shrink-0">' + itemPrice + ' €</p>';
+                html += '</div>';
+              });
+              cartItems.innerHTML = html;
+
+              // Calculer les totaux
+              const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0) / 100;
+              subtotalEl.textContent = subtotal.toFixed(2) + ' €';
+              totalEl.textContent = subtotal.toFixed(2) + ' €';
+            }
+            return;
+          } catch (error) {
+            console.log('Snipcart store error:', error);
+          }
+        }
+
+        // Fallback : afficher message vide si Snipcart n'est pas disponible
+        emptyMessage.classList.remove('hidden');
+        cartItems.innerHTML = '';
+        cartSummary.classList.add('hidden');
+      };
+
+      // Initialiser et mettre à jour
+      const initCart = () => {
+        updateCartDisplay();
+        
+        // Écouter les changements
+        if (window.Snipcart && window.Snipcart.events) {
+          window.Snipcart.events.on('item.added', updateCartDisplay);
+          window.Snipcart.events.on('item.removed', updateCartDisplay);
+          window.Snipcart.events.on('cart.updated', updateCartDisplay);
+        }
+      };
+
+      // Attendre Snipcart
+      if (window.Snipcart) {
+        setTimeout(initCart, 500);
+      } else {
+        document.addEventListener('snipcart.ready', () => {
+          setTimeout(initCart, 500);
+        });
+      }
+
+      // Fallback : vérifier toutes les secondes
+      const checkInterval = setInterval(() => {
+        if (window.Snipcart && window.Snipcart.store) {
+          clearInterval(checkInterval);
+          updateCartDisplay();
+        }
+      }, 1000);
     </script>
   </main>
 </Layout>

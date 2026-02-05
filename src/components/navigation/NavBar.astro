@@ -60,7 +60,7 @@ const menuItems = [
 			</label>
 			<a
 				href={withBase('/panier')}
-				class="group flex h-10 w-10 items-center justify-center rounded-full border border-white/30 text-white/80 transition hover:border-white/60 hover:text-white focus:outline-none"
+				class="snipcart-checkout group relative flex h-10 w-10 items-center justify-center rounded-full border border-white/30 text-white/80 transition hover:border-white/60 hover:text-white focus:outline-none cursor-pointer"
 				aria-label="Panier"
 			>
 				<svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5">
@@ -69,6 +69,7 @@ const menuItems = [
 						d="M7 6V5a5 5 0 0 1 10 0v1h3v14H4V6h3Zm2 0h6V5a3 3 0 0 0-6 0v1Z"
 					/>
 				</svg>
+				<span id="cart-badge" class="absolute -top-2 -right-2 flex items-center justify-center h-5 w-5 bg-red-600 text-white text-xs font-bold rounded-full hidden">0</span>
 			</a>
 		</div>
 	</header>
@@ -313,70 +314,75 @@ const menuItems = [
 	<script type="module" is:inline>
 		console.log('🚀 NavBar script loading...');
 		
-		const drawerToggle = document.getElementById('ahd-drawer-toggle');
-		const drawer = document.getElementById('ahd-drawer');
-		const menuButton = document.getElementById('ahd-menu-button');
-		const accountToggle = document.getElementById('ahd-account-toggle');
-		const accountButton = document.getElementById('ahd-account-button');
-		const accountCloseButton = document.querySelector('[data-account-close]');
-		const accountSignupButton = document.querySelector('[data-account-signup]');
-		const signupModal = document.getElementById('ahd-signup-modal');
-		const signupModalForm = document.querySelector('[data-signup-modal-form]');
-		const signupModalClose = document.querySelector('[data-signup-close]');
-		const accountPanel = document.getElementById('ahd-account-panel');
-		const docEl = document.documentElement;
-		const accountPageUrl = window.location.pathname.includes('AHD_paddle') ? '/AHD_paddle/compte' : '/compte';
-		const accountStorageKey = 'ahd-account-active';
+		const initNavigation = () => {
+			console.log('🔧 Initializing navigation');
+			
+			const drawerToggle = document.getElementById('ahd-drawer-toggle');
+			const drawer = document.getElementById('ahd-drawer');
+			const menuButton = document.getElementById('ahd-menu-button');
+			const accountToggle = document.getElementById('ahd-account-toggle');
+			const accountButton = document.getElementById('ahd-account-button');
+			const accountCloseButton = document.querySelector('[data-account-close]');
+			const accountSignupButton = document.querySelector('[data-account-signup]');
+			const signupModal = document.getElementById('ahd-signup-modal');
+			const signupModalForm = document.querySelector('[data-signup-modal-form]');
+			const signupModalClose = document.querySelector('[data-signup-close]');
+			const accountPanel = document.getElementById('ahd-account-panel');
+			const docEl = document.documentElement;
+			const accountPageUrl = window.location.pathname.includes('AHD_paddle') ? '/AHD_paddle/compte' : '/compte';
+			const accountStorageKey = 'ahd-account-active';
 
-		console.log('🔧 Elements check:', {
-			drawerToggle: !!drawerToggle,
-			drawer: !!drawer,
-			menuButton: !!menuButton,
-			accountToggle: !!accountToggle,
-			accountButton: !!accountButton,
-			accountPanel: !!accountPanel
-		});
-
-		const getStorage = () => {
-			try {
-				return window.localStorage;
-			} catch (error) {
-				return null;
-			}
-		};
-
-		// Gérer l'expansion du drawer au survol du sous-menu
-		const menuGroups = document.querySelectorAll('[role="group"]');
-
-		menuGroups.forEach((group) => {
-			const hasSubmenu = Boolean(group.querySelector('.submenu-panel'));
-			if (!hasSubmenu) return;
-			group.addEventListener('mouseenter', () => {
-				if (drawer && drawerToggle?.checked) {
-					drawer.classList.add('submenu-active');
-				}
+			console.log('🔧 Elements check:', {
+				drawerToggle: !!drawerToggle,
+				drawer: !!drawer,
+				menuButton: !!menuButton,
+				accountToggle: !!accountToggle,
+				accountButton: !!accountButton,
+				accountPanel: !!accountPanel,
+				accountSignupButton: !!accountSignupButton,
+				signupModal: !!signupModal
 			});
-			group.addEventListener('mouseleave', () => {
-				if (drawer) {
-					drawer.classList.remove('submenu-active');
-				}
-			});
-		});
 
-		if (drawerToggle && menuButton) {
-			menuButton.setAttribute('aria-expanded', String(drawerToggle.checked));
-			drawerToggle.addEventListener('change', () => {
+			const getStorage = () => {
+				try {
+					return window.localStorage;
+				} catch (error) {
+					return null;
+				}
+			};
+
+			// Gérer l'expansion du drawer au survol du sous-menu
+			const menuGroups = document.querySelectorAll('[role="group"]');
+
+			menuGroups.forEach((group) => {
+				const hasSubmenu = Boolean(group.querySelector('.submenu-panel'));
+				if (!hasSubmenu) return;
+				group.addEventListener('mouseenter', () => {
+					if (drawer && drawerToggle?.checked) {
+						drawer.classList.add('submenu-active');
+					}
+				});
+				group.addEventListener('mouseleave', () => {
+					if (drawer) {
+						drawer.classList.remove('submenu-active');
+					}
+				});
+			});
+
+			if (drawerToggle && menuButton) {
 				menuButton.setAttribute('aria-expanded', String(drawerToggle.checked));
-			});
-		}
+				drawerToggle.addEventListener('change', () => {
+					menuButton.setAttribute('aria-expanded', String(drawerToggle.checked));
+				});
+			}
 
-		if (accountToggle && accountButton && accountPanel) {
-			console.log('🔵 Account components found:', !!accountToggle, !!accountButton, !!accountPanel);
+			if (accountToggle && accountButton && accountPanel) {
+				console.log('🔵 Account components found:', !!accountToggle, !!accountButton, !!accountPanel);
 			
 			let isAccountPanelOpen = false;
 			
 			const openAccountPanel = () => {
-				console.log('🔓 Opening account panel');
+				console.log('� Opening account panel');
 				isAccountPanelOpen = true;
 				accountPanel.classList.remove('translate-x-full');
 				accountPanel.classList.add('translate-x-0');
@@ -385,7 +391,7 @@ const menuItems = [
 			};
 			
 			const closeAccountPanel = () => {
-				console.log('🔒 Closing account panel');
+				console.log('� Closing account panel');
 				isAccountPanelOpen = false;
 				accountPanel.classList.remove('translate-x-0');
 				accountPanel.classList.add('translate-x-full');
@@ -522,7 +528,43 @@ const menuItems = [
 			}
 		}
 
-		if (accountToggle && accountPanel) {
+		// Initialiser le panier Snippcart
+		if (typeof window !== 'undefined') {
+			// Attendre que Snippcart soit chargé
+			const waitForSnipcart = () => {
+				if (window.Snipcart) {
+					console.log('🛒 Snippcart loaded');
+					updateCartBadge();
+					
+					// Écouter les changements du panier
+					window.Snipcart.events.on('item.added', updateCartBadge);
+					window.Snipcart.events.on('item.removed', updateCartBadge);
+					window.Snipcart.events.on('cart.updated', updateCartBadge);
+				} else {
+					setTimeout(waitForSnipcart, 100);
+				}
+			};
+
+			const updateCartBadge = () => {
+				try {
+					if (window.Snipcart && window.Snipcart.store) {
+						const cart = window.Snipcart.store.getState().cart.items;
+						const badge = document.getElementById('cart-badge');
+						if (badge) {
+							const itemCount = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+							badge.textContent = itemCount;
+							badge.style.display = itemCount > 0 ? 'flex' : 'none';
+							console.log('🛒 Cart updated:', itemCount, 'items');
+						}
+					}
+				} catch (error) {
+					console.error('Error updating cart badge:', error);
+				}
+			};
+
+			// Démarrer la vérification après un délai pour laisser Snippcart charger
+			setTimeout(waitForSnipcart, 1000);
+
 			const closeAccount = () => {
 				if (accountButton && accountPanel) {
 					accountPanel.classList.remove('translate-x-0');
@@ -536,55 +578,74 @@ const menuItems = [
 			accountCloseButton?.addEventListener('click', closeAccount);
 
 			// Direct signup button handler
-			if (accountSignupButton) {
+			if (accountSignupButton && signupModal) {
+				console.log('✅ Signup button and modal found');
 				accountSignupButton.addEventListener('click', () => {
+					console.log('📝 Signup button clicked');
 					closeAccount();
 					setTimeout(() => {
 						signupModal.classList.remove('hidden');
 						signupModal.classList.add('flex');
+						console.log('✅ Signup modal opened');
 					}, 50);
+				});
+			} else {
+				console.log('⚠️ Signup components missing:', {
+					accountSignupButton: !!accountSignupButton,
+					signupModal: !!signupModal
 				});
 			}
 
-			signupModalClose?.addEventListener('click', () => {
-				signupModal?.classList.add('hidden');
-				signupModal?.classList.remove('flex');
-			});
-			signupModal?.addEventListener('click', (event) => {
-				if (event.target === signupModal) {
-					signupModal.classList.add('hidden');
-					signupModal.classList.remove('flex');
-				}
-			});
-			signupModalForm?.addEventListener('submit', (event) => {
-				event.preventDefault();
-				console.log('📝 Signup form submitted');
-				
-				// Récupérer les données du formulaire
-				const formData = new FormData(signupModalForm);
-				const signupData = {
-					firstname: formData.get('signup-modal-firstname') || document.getElementById('signup-modal-firstname')?.value,
-					lastname: formData.get('signup-modal-lastname') || document.getElementById('signup-modal-lastname')?.value,
-					email: formData.get('signup-modal-email') || document.getElementById('signup-modal-email')?.value,
-					timestamp: new Date().toISOString()
-				};
-				
-				console.log('💾 Saving signup data:', signupData);
-				
-				// Sauvegarder les données temporairement pour les pré-remplir sur la page compte
-				const storage = getStorage();
-				if (storage) {
-					storage.setItem('ahd-signup-data', JSON.stringify(signupData));
-					storage.setItem(accountStorageKey, 'true');
-				}
-				
-				// Fermer la modal
-				signupModal?.classList.add('hidden');
-				signupModal?.classList.remove('flex');
-				
-				// Rediriger vers la page compte
-				window.location.href = accountPageUrl;
-			});
+			if (signupModalClose) {
+				signupModalClose.addEventListener('click', () => {
+					signupModal?.classList.add('hidden');
+					signupModal?.classList.remove('flex');
+				});
+			}
+
+			if (signupModal) {
+				signupModal.addEventListener('click', (event) => {
+					if (event.target === signupModal) {
+						signupModal.classList.add('hidden');
+						signupModal.classList.remove('flex');
+					}
+				});
+			}
+
+			if (signupModalForm) {
+				signupModalForm.addEventListener('submit', (event) => {
+					event.preventDefault();
+					console.log('📝 Signup form submitted');
+					
+					// Récupérer les données du formulaire
+					const firstnameInput = document.getElementById('signup-modal-firstname');
+					const lastnameInput = document.getElementById('signup-modal-lastname');
+					const emailInput = document.getElementById('signup-modal-email');
+
+					const signupData = {
+						firstname: firstnameInput?.value || '',
+						lastname: lastnameInput?.value || '',
+						email: emailInput?.value || '',
+						timestamp: new Date().toISOString()
+					};
+					
+					console.log('💾 Saving signup data:', signupData);
+					
+					// Sauvegarder les données temporairement pour les pré-remplir sur la page compte
+					const storage = getStorage();
+					if (storage) {
+						storage.setItem('ahd-signup-data', JSON.stringify(signupData));
+						storage.setItem(accountStorageKey, 'true');
+					}
+					
+					// Fermer la modal
+					signupModal?.classList.add('hidden');
+					signupModal?.classList.remove('flex');
+					
+					// Rediriger vers la page compte
+					window.location.href = accountPageUrl;
+				});
+			}
 
 			window.addEventListener('keydown', (event) => {
 				if (event.key === 'Escape' && accountPanel && !accountPanel.classList.contains('translate-x-full')) {
@@ -601,6 +662,14 @@ const menuItems = [
 				},
 				true
 			);
+			}
+		};
+
+		// Initialiser quand le DOM est prêt
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initNavigation);
+		} else {
+			initNavigation();
 		}
 	</script>
 </div>

@@ -181,12 +181,28 @@ const finalShapeItems = shapeItems.length ? shapeItems : shapeFallback;
 
           <!-- Actions -->
           <div class="flex gap-3">
-            <div class="flex items-center border border-midnight/15 rounded-xl overflow-hidden">
-              <button class="px-3 py-2 text-sm hover:bg-midnight/5">-</button>
-              <input type="number" value="1" class="w-12 text-center border-none focus:outline-none" min="1" />
-              <button class="px-3 py-2 text-sm hover:bg-midnight/5">+</button>
+            <div class="flex items-center bg-midnight rounded-xl overflow-hidden">
+              <button id="qty-minus" class="px-3 py-2 text-sm text-white hover:bg-midnight/80 transition font-semibold">−</button>
+              <input id="qty-input" type="text" value="1" class="w-12 text-center bg-white text-midnight border-none focus:outline-none font-semibold" />
+              <button id="qty-plus" class="px-3 py-2 text-sm text-white hover:bg-midnight/80 transition font-semibold">+</button>
             </div>
-            <button class="flex-1 rounded-xl bg-midnight px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-white hover:bg-midnight/80 transition">
+            <button 
+              id="snipcart-button"
+              class="snipcart-add-item flex-1 rounded-xl bg-midnight px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-white hover:bg-midnight/80 transition"
+              data-item-id={product.slug}
+              data-item-name={product.name}
+              data-item-price={product.price}
+              data-item-url={Astro.url.origin + withBase(`/produit/${product.slug}`)}
+              data-item-description={product.shortDescription}
+              data-item-image={Astro.url.origin + product.images[0]?.main}
+              data-item-stackable="never"
+              data-item-custom1-name={product.variants && product.variants.length > 0 ? 'Couleur' : undefined}
+              data-item-custom1-options={product.variants && product.variants.length > 0 ? product.variants.map((v) => v.color).join('|') : undefined}
+              data-item-custom1-value={product.variants && product.variants.length > 0 ? product.variants[0]?.color : undefined}
+              data-item-custom2-name={product.sizes && product.sizes.length > 0 ? 'Taille' : undefined}
+              data-item-custom2-options={product.sizes && product.sizes.length > 0 ? product.sizes.join('|') : undefined}
+              data-item-custom2-value={product.sizes && product.sizes.length > 0 ? product.sizes[0] : undefined}
+            >
               Ajouter au panier
             </button>
             <button class="px-4 py-3 rounded-xl border border-midnight/15 hover:border-midnight transition">
@@ -198,6 +214,12 @@ const finalShapeItems = shapeItems.length ? shapeItems : shapeFallback;
 
      
         </div>
+      </div>
+
+      <!-- Notification d'ajout au panier -->
+      <div id="cart-notification" class="fixed top-24 right-6 z-50 bg-green-600 text-white px-6 py-4 rounded-xl shadow-lg opacity-0 transition-opacity duration-500 pointer-events-none">
+        <div class="font-semibold">✓ Produit ajouté au panier !</div>
+        <div id="notification-details" class="text-sm mt-1 opacity-90"></div>
       </div>
 
       <!-- Description -->
@@ -382,6 +404,156 @@ const finalShapeItems = shapeItems.length ? shapeItems : shapeFallback;
       nav.style.setProperty('--nav-border', 'rgba(255, 255, 255, 0.15)');
       nav.style.setProperty('--nav-foreground', 'rgba(255, 255, 255, 0.92)');
       nav.style.setProperty('--nav-hover', '#ffffff');
+    }
+
+    // Gestion de la quantité
+    const qtyInput = document.getElementById('qty-input');
+    const qtyMinus = document.getElementById('qty-minus');
+    const qtyPlus = document.getElementById('qty-plus');
+    const addToCartBtn = document.querySelector('.snipcart-add-item');
+    const cartNotification = document.getElementById('cart-notification');
+
+    const getQuantity = () => {
+      const value = parseInt(qtyInput?.value || 1, 10);
+      return isNaN(value) || value < 1 ? 1 : value;
+    };
+
+    const setQuantity = (qty) => {
+      const validQty = Math.max(1, Math.floor(qty));
+      if (qtyInput) {
+        qtyInput.value = validQty;
+      }
+      if (addToCartBtn) {
+        addToCartBtn.dataset.itemQuantity = validQty;
+      }
+    };
+
+    const updateQuantity = () => {
+      setQuantity(getQuantity());
+    };
+
+    // Afficher une notification quand le produit est ajouté au panier
+    const showCartNotification = () => {
+      if (cartNotification) {
+        const qty = getQuantity();
+        const notificationDetails = document.getElementById('notification-details');
+        
+        // Obtenir le nombre total d'articles dans le panier
+        let totalItems = 0;
+        if (window.Snipcart && window.Snipcart.store) {
+          try {
+            const cart = window.Snipcart.store.getState().cart.items;
+            totalItems = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+          } catch (error) {
+            console.error('Error getting cart items:', error);
+          }
+        }
+        
+        if (notificationDetails) {
+          const pluralArticle = qty > 1 ? 'articles' : 'article';
+          const pluralTotal = totalItems > 1 ? 'articles' : 'article';
+          notificationDetails.textContent = `${qty} ${pluralArticle} ajouté(s) • Total: ${totalItems} ${pluralTotal}`;
+        }
+        
+        cartNotification.classList.remove('opacity-0');
+        setTimeout(() => {
+          cartNotification.classList.add('opacity-0');
+        }, 3500);
+      }
+      // Mettre à jour le badge du panier
+      updateCartBadge();
+    };
+
+    // Mettre à jour le badge du panier
+    const updateCartBadge = () => {
+      if (window.Snipcart && window.Snipcart.store) {
+        const cart = window.Snipcart.store.getState().cart.items;
+        const badge = document.getElementById('cart-badge');
+        if (badge) {
+          badge.textContent = cart.length;
+          badge.style.display = cart.length > 0 ? 'flex' : 'none';
+        }
+      }
+    };
+
+    // Ajouter un listener sur le clic du bouton Snippcart
+    addToCartBtn?.addEventListener('click', () => {
+      setTimeout(showCartNotification, 500);
+    });
+
+    // Écouter les changements du panier Snippcart
+    if (window.Snipcart) {
+      window.Snipcart.events.on('item.added', showCartNotification);
+      window.Snipcart.events.on('item.removed', updateCartBadge);
+      updateCartBadge();
+    }
+
+    qtyMinus?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const currentQty = getQuantity();
+      if (currentQty > 1) {
+        setQuantity(currentQty - 1);
+      }
+    });
+
+    qtyPlus?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const currentQty = getQuantity();
+      setQuantity(currentQty + 1);
+    });
+
+    qtyInput?.addEventListener('input', () => {
+      const currentQty = getQuantity();
+      qtyInput.value = currentQty;
+      updateQuantity();
+    });
+
+    qtyInput?.addEventListener('blur', updateQuantity);
+    
+    // Initialisation
+    updateQuantity();
+
+    // Mise à jour des champs personnalisés Snipcart (couleur et taille)
+    const initVariantUpdaters = () => {
+      const snipcartButton = document.getElementById('snipcart-button');
+      if (!snipcartButton) {
+        console.log('Snipcart button not found');
+        return;
+      }
+
+      // Chercher le select de taille (éviter les autres selects)
+      const mainSection = document.querySelector('main');
+      if (mainSection) {
+        const sizeSelect = mainSection.querySelector('select');
+        if (sizeSelect) {
+          sizeSelect.addEventListener('change', () => {
+            const selectedSize = sizeSelect.value;
+            if (selectedSize && selectedSize !== 'Sélectionner') {
+              snipcartButton.setAttribute('data-item-custom2-value', selectedSize);
+            }
+          });
+        }
+      }
+
+      // Chercher les boutons de couleur
+      const colorButtons = document.querySelectorAll('button[style*="background-color"]');
+      if (colorButtons.length > 0) {
+        colorButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const colorName = btn.getAttribute('title');
+            if (colorName) {
+              snipcartButton.setAttribute('data-item-custom1-value', colorName);
+            }
+          });
+        });
+      }
+    };
+
+    // Attendre que le DOM soit prêt
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initVariantUpdaters);
+    } else {
+      initVariantUpdaters();
     }
   </script>
 </Layout>

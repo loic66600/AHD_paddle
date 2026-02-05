@@ -13,6 +13,7 @@ const { title = 'AHD Paddle', showFooter = true } = Astro.props;
 const favicon = withBase('/images/favicon.png');
 const lightLogo = withBase('/images/logo.webp');
 const darkLogo = withBase('/images/logo_blanc.png');
+const apiKey = import.meta.env.PUBLIC_SNIPCART_API_KEY;
 ---
 <!doctype html>
 <html lang="fr">
@@ -25,6 +26,17 @@ const darkLogo = withBase('/images/logo_blanc.png');
     <meta name="theme-color" content="#010104" />
     <link rel="icon" type="image/png" href={favicon} />
     <link rel="apple-touch-icon" href={favicon} />
+    
+    <!-- Snipcart Initialization Script -->
+    <script is:inline define:vars={{ apiKey }}>
+      window.SnipcartSettings = {
+        publicApiKey: apiKey,
+        loadStrategy: 'on-user-interaction',
+        addProductBehavior: 'none',
+      };
+
+      (()=>{var c,d;(d=(c=window.SnipcartSettings).version)!=null||(c.version="3.0");var s,S;(S=(s=window.SnipcartSettings).timeoutDuration)!=null||(s.timeoutDuration=2750);var l,p;(p=(l=window.SnipcartSettings).domain)!=null||(l.domain="cdn.snipcart.com");var w,u;(u=(w=window.SnipcartSettings).protocol)!=null||(w.protocol="https");var f=window.SnipcartSettings.version.includes("v3.0.0-ci")||window.SnipcartSettings.version!="3.0"&&window.SnipcartSettings.version.localeCompare("3.4.0",void 0,{numeric:!0,sensitivity:"base"})===-1,m=["focus","mouseover","touchmove","scroll","keydown"];window.LoadSnipcart=o;document.readyState==="loading"?document.addEventListener("DOMContentLoaded",r):r();function r(){window.SnipcartSettings.loadStrategy?window.SnipcartSettings.loadStrategy==="on-user-interaction"&&(m.forEach(t=>document.addEventListener(t,o)),setTimeout(o,window.SnipcartSettings.timeoutDuration)):o()}var a=!1;function o(){if(a)return;a=!0;let t=document.getElementsByTagName("head")[0],e=document.querySelector("#snipcart"),i=document.querySelector(`src[src^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][src$="snipcart.js"]`),n=document.querySelector(`link[href^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][href$="snipcart.css"]`);e||(e=document.createElement("div"),e.id="snipcart",e.setAttribute("hidden","true"),document.body.appendChild(e)),v(e),i||(i=document.createElement("script"),i.src=`${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.js`,i.async=!0,t.appendChild(i)),n||(n=document.createElement("link"),n.rel="stylesheet",n.type="text/css",n.href=`${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.css`,t.prepend(n)),m.forEach(g=>document.removeEventListener(g,o))}function v(t){!f||(t.dataset.apiKey=window.SnipcartSettings.publicApiKey,window.SnipcartSettings.addProductBehavior&&(t.dataset.configAddProductBehavior=window.SnipcartSettings.addProductBehavior),window.SnipcartSettings.modalStyle&&(t.dataset.configModalStyle=window.SnipcartSettings.modalStyle),window.SnipcartSettings.currency&&(t.dataset.currency=window.SnipcartSettings.currency),window.SnipcartSettings.templatesUrl&&(t.dataset.templatesUrl=window.SnipcartSettings.templatesUrl))}})();
+    </script>
   </head>
   <body>
     <!-- Barre de navigation globale utilisée sur toutes les pages -->
@@ -240,6 +252,111 @@ const darkLogo = withBase('/images/logo_blanc.png');
         initNavigation();
         ensureVideoAutoplay();
       });
+    </script>
+
+    <!-- Personnalisation du panier Snipcart -->
+    <script type="module" is:inline>
+      const customizeSnipcart = () => {
+        if (!window.Snipcart) {
+          setTimeout(customizeSnipcart, 200);
+          return;
+        }
+
+        // Attendre que Snipcart soit prêt
+        document.addEventListener('snipcart.ready', () => {
+          console.log('🛒 Snipcart ready, customizing...');
+          
+          // Ajouter le lien "Continuer mes achats" dans le panier
+          const addContinueShoppingLink = () => {
+            // Supprimer l'ancien lien s'il existe
+            const oldLink = document.getElementById('custom-continue-shopping');
+            if (oldLink) oldLink.remove();
+
+            // Chercher plusieurs emplacements possibles dans le panier
+            const cartSummary = document.querySelector('.snipcart-cart-summary');
+            const cartFooter = document.querySelector('.snipcart-cart-summary__footer');
+            const cartContent = document.querySelector('.snipcart__box--badge-highlight');
+            const checkoutBtn = document.querySelector('.snipcart-checkout');
+            
+            const targetElement = cartFooter || cartSummary || cartContent || checkoutBtn?.parentElement;
+            
+            if (targetElement) {
+              const continueLink = document.createElement('a');
+              continueLink.id = 'custom-continue-shopping';
+              continueLink.href = '#';
+              continueLink.textContent = '← Continuer mes achats';
+              continueLink.style.cssText = `
+                display: block;
+                text-align: center;
+                margin: 1rem auto 0.5rem;
+                padding: 0.875rem 1.5rem;
+                color: #1a1a1a;
+                text-decoration: none;
+                font-size: 0.9rem;
+                font-weight: 600;
+                border: 2px solid #e5e7eb;
+                border-radius: 0.75rem;
+                transition: all 0.2s;
+                background: white;
+                max-width: 300px;
+              `;
+              continueLink.addEventListener('mouseenter', () => {
+                continueLink.style.borderColor = '#1a1a1a';
+                continueLink.style.backgroundColor = '#f9fafb';
+              });
+              continueLink.addEventListener('mouseleave', () => {
+                continueLink.style.borderColor = '#e5e7eb';
+                continueLink.style.backgroundColor = 'white';
+              });
+              continueLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (window.Snipcart && window.Snipcart.api && window.Snipcart.api.theme && window.Snipcart.api.theme.cart) {
+                  window.Snipcart.api.theme.cart.close();
+                }
+                console.log('✅ Cart closed');
+              });
+              
+              targetElement.appendChild(continueLink);
+              console.log('✅ Continue shopping link added to:', targetElement.className);
+            } else {
+              console.log('⚠️ Could not find suitable target element for continue shopping link');
+            }
+          };
+
+          // Observer pour détecter l'ouverture du panier
+          window.Snipcart.events.on('cart.opened', () => {
+            console.log('🛒 Cart opened, adding link...');
+            // Essayer plusieurs fois car le DOM du panier met du temps à se construire
+            setTimeout(addContinueShoppingLink, 100);
+            setTimeout(addContinueShoppingLink, 500);
+            setTimeout(addContinueShoppingLink, 1000);
+          });
+
+          // Observer les changements DOM dans le panier
+          const observeCart = () => {
+            const cartContainer = document.querySelector('#snipcart');
+            if (cartContainer) {
+              const observer = new MutationObserver((mutations) => {
+                const cartVisible = document.querySelector('.snipcart-modal--opened, .snipcart-cart');
+                if (cartVisible && !document.getElementById('custom-continue-shopping')) {
+                  setTimeout(addContinueShoppingLink, 300);
+                }
+              });
+              observer.observe(cartContainer, { childList: true, subtree: true });
+              console.log('✅ Cart observer set up');
+            }
+          };
+
+          setTimeout(observeCart, 1000);
+        });
+      };
+
+      // Démarrer la personnalisation
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', customizeSnipcart);
+      } else {
+        customizeSnipcart();
+      }
     </script>
 
     <Fragment set:html={getLoaderScript()} />
