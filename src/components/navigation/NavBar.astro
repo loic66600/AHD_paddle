@@ -178,7 +178,7 @@ const menuItems = [
 			</form>
 
 			<div class="pt-2 space-y-3 text-center" data-account-cta>
-				<p class="text-xs font-semibold uppercase tracking-[0.3em] text-midnight/70">N’ÊTES-VOUS PAS ENCORE INSCRIT ?</p>
+				<p class="text-xs font-semibold uppercase tracking-[0.3em] text-midnight/70">N'ÊTES-VOUS PAS ENCORE INSCRIT ?</p>
 				<p class="text-sm text-midnight/70">
 					Inscris-toi maintenant pour suivre tes commandes et pour avoir un accès gratuit au contenu premium exclusif de AHD
 				</p>
@@ -256,7 +256,7 @@ const menuItems = [
 					/>
 				</div>
 				<button type="submit" class="mt-2 w-full rounded-full bg-midnight px-5 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-white">
-					S’enregistrer
+					S'enregistrer
 				</button>
 			</form>
 		</div>
@@ -310,7 +310,9 @@ const menuItems = [
 		aria-hidden="true"
 	></label>
 
-	<script type="module" is:inline define:vars={{accountPage}}>
+	<script type="module" is:inline>
+		console.log('🚀 NavBar script loading...');
+		
 		const drawerToggle = document.getElementById('ahd-drawer-toggle');
 		const drawer = document.getElementById('ahd-drawer');
 		const menuButton = document.getElementById('ahd-menu-button');
@@ -323,9 +325,18 @@ const menuItems = [
 		const signupModalClose = document.querySelector('[data-signup-close]');
 		const accountPanel = document.getElementById('ahd-account-panel');
 		const docEl = document.documentElement;
-		const accountPageUrl = accountPage;
+		const accountPageUrl = window.location.pathname.includes('AHD_paddle') ? '/AHD_paddle/compte' : '/compte';
 		const accountStorageKey = 'ahd-account-active';
-		
+
+		console.log('🔧 Elements check:', {
+			drawerToggle: !!drawerToggle,
+			drawer: !!drawer,
+			menuButton: !!menuButton,
+			accountToggle: !!accountToggle,
+			accountButton: !!accountButton,
+			accountPanel: !!accountPanel
+		});
+
 		const getStorage = () => {
 			try {
 				return window.localStorage;
@@ -336,7 +347,7 @@ const menuItems = [
 
 		// Gérer l'expansion du drawer au survol du sous-menu
 		const menuGroups = document.querySelectorAll('[role="group"]');
-		
+
 		menuGroups.forEach((group) => {
 			const hasSubmenu = Boolean(group.querySelector('.submenu-panel'));
 			if (!hasSubmenu) return;
@@ -360,70 +371,99 @@ const menuItems = [
 		}
 
 		if (accountToggle && accountButton && accountPanel) {
-			accountButton.setAttribute('aria-expanded', String(accountToggle.checked));
-			const syncAccountState = () => {
-				accountButton.setAttribute('aria-expanded', String(accountToggle.checked));
-				docEl.classList.toggle('account-open', accountToggle.checked);
-				accountPanel.classList.toggle('is-open', accountToggle.checked);
+			console.log('🔵 Account components found:', !!accountToggle, !!accountButton, !!accountPanel);
+			
+			let isAccountPanelOpen = false;
+			
+			const openAccountPanel = () => {
+				console.log('🔓 Opening account panel');
+				isAccountPanelOpen = true;
+				accountPanel.classList.remove('translate-x-full');
+				accountPanel.classList.add('translate-x-0');
+				accountButton.setAttribute('aria-expanded', 'true');
+				docEl.classList.add('account-open');
 			};
-			accountToggle.addEventListener('change', syncAccountState);
+			
+			const closeAccountPanel = () => {
+				console.log('🔒 Closing account panel');
+				isAccountPanelOpen = false;
+				accountPanel.classList.remove('translate-x-0');
+				accountPanel.classList.add('translate-x-full');
+				accountButton.setAttribute('aria-expanded', 'false');
+				docEl.classList.remove('account-open');
+			};
+			
+			// Event handler direct sur le bouton
 			accountButton.addEventListener('click', (event) => {
+				event.preventDefault(); // Empêcher le comportement du label
+				
+				console.log('🔵 Account button clicked, current panel state:', isAccountPanelOpen);
+				
 				const storage = getStorage();
 				const hasAccount = storage?.getItem(accountStorageKey) === 'true';
+				console.log('💾 Storage check - hasAccount:', hasAccount);
+				
 				if (hasAccount) {
-					event.preventDefault();
-					accountToggle.checked = false;
-					syncAccountState();
+					console.log('🔄 User already logged in, redirecting...');
+					closeAccountPanel();
 					window.location.href = accountPageUrl;
 					return;
 				}
-				setTimeout(syncAccountState, 0);
+				
+				// Basculer l'état du panneau
+				if (isAccountPanelOpen) {
+					closeAccountPanel();
+				} else {
+					openAccountPanel();
+				}
 			});
-			syncAccountState();
+			
+			// Initialiser l'état
+			closeAccountPanel();
+		} else {
+			console.log('⚠️ Missing account components:', {
+				accountToggle: !!accountToggle,
+				accountButton: !!accountButton, 
+				accountPanel: !!accountPanel
+			});
 		}
 
-		// Gestion des clics sur les liens du drawer
-		const closeMenu = () => {
-			console.log('🔴 Closing menu...');
-			if (drawerToggle) {
+		// Gestion des clics sur les liens du drawer pour fermer le menu
+		if (drawerToggle && drawer) {
+			const closeMenu = () => {
 				drawerToggle.checked = false;
-				console.log('✅ Drawer toggle unchecked');
-			}
-			if (menuButton) {
-				menuButton.setAttribute('aria-expanded', 'false');
-			}
-			if (drawer) {
-				drawer.classList.remove('submenu-active');
-			}
-		};
+				if (menuButton) {
+					menuButton.setAttribute('aria-expanded', 'false');
+				}
+				console.log('🔧 Menu closed');
+			};
 
-		// Observer pour les changements dans le drawer (sous-menu)
-		if (drawer) {
 			const setupLinkHandlers = () => {
-				const allLinks = drawer.querySelectorAll('a');
-				console.log('🔗 Setting up handlers for', allLinks.length, 'links');
-				
-				allLinks.forEach((link, index) => {
+				const links = drawer.querySelectorAll('a');
+				console.log('🔗 Setting up handlers for', links.length, 'links');
+
+				links.forEach((link, index) => {
+					// Retirer l'ancien handler s'il existe
+					if (link._clickHandler) {
+						link.removeEventListener('click', link._clickHandler);
+					}
+
 					const href = link.getAttribute('href');
-					console.log(`📎 Link ${index}: ${href} - ${link.textContent.trim()}`);
-					
-					// Supprimer l'ancien handler pour éviter les doublons
-					link.removeEventListener('click', link._clickHandler);
-					
-					// Créer le nouveau handler
+					console.log(`📎 Link ${index}: ${href} - ${link.textContent?.trim()}`);
+
 					const clickHandler = (e) => {
-						console.log('🖱️ Clicked on link:', href, 'Current page:', window.location.pathname);
-						
+						console.log('✅ Clicked on link:', href, 'Current page:', window.location.pathname); 
+
 						// Pour les liens d'ancrage locaux
 						if (href && href.startsWith('#')) {
 							e.preventDefault();
 							console.log('🎯 Anchor link detected, closing menu...');
 							closeMenu();
-							
+
 							setTimeout(() => {
 								const targetId = href.substring(1);
 								const targetEl = document.getElementById(targetId);
-								console.log('📍 Looking for element:', targetId, 'Found:', !!targetEl);
+								console.log('🔍 Looking for element:', targetId, 'Found:', !!targetEl); 
 								if (targetEl) {
 									targetEl.scrollIntoView({ behavior: 'smooth' });
 									console.log('📜 Scrolled to element');
@@ -439,7 +479,7 @@ const menuItems = [
 							closeMenu();
 						}
 					};
-					
+
 					// Sauvegarder la référence du handler
 					link._clickHandler = clickHandler;
 					link.addEventListener('click', clickHandler);
@@ -463,37 +503,38 @@ const menuItems = [
 					setTimeout(setupLinkHandlers, 50);
 				}
 			});
-			
-			observer.observe(drawer, { 
-				childList: true, 
+
+			observer.observe(drawer, {
+				childList: true,
 				subtree: true,
 				attributes: true,
 				attributeFilter: ['class']
 			});
-		}
 
-		// Fermer le menu en cliquant sur l'overlay
-		const overlay = document.getElementById('ahd-drawer-overlay');
-		if (overlay) {
-			overlay.addEventListener('click', (e) => {
-				e.preventDefault();
-				console.log('🖱️ Clicked on overlay, closing menu');
-				closeMenu();
-			});
+			// Fermer le menu en cliquant sur l'overlay
+			const overlay = document.getElementById('ahd-drawer-overlay');
+			if (overlay) {
+				overlay.addEventListener('click', (e) => {
+					e.preventDefault();
+					console.log('🖱️ Clicked on overlay, closing menu');
+					closeMenu();
+				});
+			}
 		}
 
 		if (accountToggle && accountPanel) {
 			const closeAccount = () => {
-				accountToggle.checked = false;
-				if (accountButton) {
+				if (accountButton && accountPanel) {
+					accountPanel.classList.remove('translate-x-0');
+					accountPanel.classList.add('translate-x-full');
 					accountButton.setAttribute('aria-expanded', 'false');
+					docEl.classList.remove('account-open');
+					console.log('🔒 Account panel closed');
 				}
-				docEl.classList.remove('account-open');
-				accountPanel.classList.remove('is-open');
 			};
 
 			accountCloseButton?.addEventListener('click', closeAccount);
-			
+
 			// Direct signup button handler
 			if (accountSignupButton) {
 				accountSignupButton.addEventListener('click', () => {
@@ -504,7 +545,7 @@ const menuItems = [
 					}, 50);
 				});
 			}
-			
+
 			signupModalClose?.addEventListener('click', () => {
 				signupModal?.classList.add('hidden');
 				signupModal?.classList.remove('flex');
@@ -517,15 +558,36 @@ const menuItems = [
 			});
 			signupModalForm?.addEventListener('submit', (event) => {
 				event.preventDefault();
+				console.log('📝 Signup form submitted');
+				
+				// Récupérer les données du formulaire
+				const formData = new FormData(signupModalForm);
+				const signupData = {
+					firstname: formData.get('signup-modal-firstname') || document.getElementById('signup-modal-firstname')?.value,
+					lastname: formData.get('signup-modal-lastname') || document.getElementById('signup-modal-lastname')?.value,
+					email: formData.get('signup-modal-email') || document.getElementById('signup-modal-email')?.value,
+					timestamp: new Date().toISOString()
+				};
+				
+				console.log('💾 Saving signup data:', signupData);
+				
+				// Sauvegarder les données temporairement pour les pré-remplir sur la page compte
 				const storage = getStorage();
-				storage?.setItem(accountStorageKey, 'true');
+				if (storage) {
+					storage.setItem('ahd-signup-data', JSON.stringify(signupData));
+					storage.setItem(accountStorageKey, 'true');
+				}
+				
+				// Fermer la modal
 				signupModal?.classList.add('hidden');
 				signupModal?.classList.remove('flex');
+				
+				// Rediriger vers la page compte
 				window.location.href = accountPageUrl;
 			});
 
 			window.addEventListener('keydown', (event) => {
-				if (event.key === 'Escape' && accountToggle.checked) {
+				if (event.key === 'Escape' && accountPanel && !accountPanel.classList.contains('translate-x-full')) {
 					closeAccount();
 				}
 			});
@@ -533,7 +595,7 @@ const menuItems = [
 			window.addEventListener(
 				'click',
 				(event) => {
-					if (accountToggle.checked && accountPanel && !accountPanel.contains(event.target) && !accountButton?.contains(event.target)) {
+					if (accountPanel && !accountPanel.classList.contains('translate-x-full') && !accountPanel.contains(event.target) && !accountButton?.contains(event.target)) {
 						closeAccount();
 					}
 				},
