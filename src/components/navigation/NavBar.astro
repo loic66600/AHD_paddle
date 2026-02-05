@@ -264,28 +264,37 @@ const menuItems = [
 
 	<div
 		id="ahd-drawer"
-		class="fixed inset-y-0 left-0 z-50 w-72 max-w-xs -translate-x-full transform bg-midnight/95 px-8 py-12 transition-transform duration-500 will-change-transform overflow-visible peer-checked:translate-x-0 lg:w-[24rem] lg:max-w-none lg:px-10"
+		class="fixed inset-y-0 left-0 z-50 w-72 max-w-xs -translate-x-full transform bg-midnight/95 px-8 py-12 transition-all duration-500 will-change-transform overflow-visible peer-checked:translate-x-0 lg:w-[24rem] lg:max-w-none lg:px-10"
 	>
-		<nav class="flex flex-col gap-8 text-sm uppercase tracking-[0.35em] text-foam/80 lg:gap-10">
-			{menuItems.map((item) => (
-				<div class="flex flex-col gap-3 group/menu relative" role="group">
-					<a href={item.href} class="flex items-center justify-between gap-4">
-						<span>{item.label}</span>
-						{item.children && <span aria-hidden="true" class="text-base text-foam/40 transition-transform duration-200 group-hover/menu:translate-x-1">&rarr;</span>}
-					</a>
-					{item.children && (
-						<div class="flex flex-col gap-2 pl-5 text-xs uppercase tracking-[0.28em] text-foam/60 lg:absolute lg:inset-y-0 lg:left-full lg:top-0 lg:min-w-[280px] lg:max-w-[340px] lg:rounded-r-[3rem] lg:bg-white lg:px-12 lg:py-10 lg:text-left lg:text-[0.7rem] lg:tracking-[0.2em] lg:text-midnight/80 lg:shadow-[0_24px_60px_rgba(15,23,42,0.22)] lg:opacity-0 lg:pointer-events-none lg:transition lg:duration-200 lg:border-l lg:border-midnight/10 lg:-ml-px lg:h-full lg:group-hover/menu:opacity-100 lg:group-hover/menu:pointer-events-auto lg:group-hover/menu:translate-x-0 lg:group-focus-within/menu:opacity-100 lg:group-focus-within/menu:pointer-events-auto lg:group-focus-within/menu:translate-x-0 lg:pl-12">
-							{item.children.map((child) => (
-								<a href={child.href} class="flex items-center justify-between gap-3 text-foam/70 hover:text-foam lg:text-midnight lg:hover:text-midnight">
-									<span>{child.label}</span>
-									<span aria-hidden="true" class="text-base font-normal text-foam/50 lg:text-midnight/50">&rarr;</span>
-								</a>
-							))}
-						</div>
-					)}
-				</div>
-			))}
-		</nav>
+		<div class="flex h-full flex-col">
+			<nav class="relative flex flex-col gap-8 text-sm uppercase tracking-[0.35em] text-foam/80 lg:gap-10 lg:w-[18rem] lg:h-full">
+				{menuItems.map((item) => (
+					<div class="flex flex-col gap-3 group/menu relative lg:static" role="group">
+						<a href={item.href} class="flex items-center justify-between gap-4">
+							<span>{item.label}</span>
+							{item.children && <span aria-hidden="true" class="text-base text-foam/40 transition-transform duration-200 group-hover/menu:translate-x-1">&rarr;</span>}
+						</a>
+						{item.children && (
+							<div class="submenu-panel flex flex-col gap-3 pl-5 text-sm uppercase tracking-[0.35em] text-foam/80 lg:absolute lg:-top-12 lg:-bottom-12 lg:left-[18rem] lg:w-[18rem] lg:bg-midnight/95 lg:px-10 lg:py-12 lg:text-left lg:opacity-0 lg:pointer-events-none lg:transition lg:duration-200 lg:border-l lg:border-white/10 lg:group-hover/menu:opacity-100 lg:group-hover/menu:pointer-events-auto lg:group-hover/menu:translate-x-0 lg:group-focus-within/menu:opacity-100 lg:group-focus-within/menu:pointer-events-auto lg:group-focus-within/menu:translate-x-0">
+								{item.children.map((child) => (
+									<a href={child.href} class="flex items-center justify-between gap-3 text-foam/80 hover:text-gold">
+										<span>{child.label}</span>
+										<span aria-hidden="true" class="text-base font-normal text-foam/50">&rarr;</span>
+									</a>
+								))}
+							</div>
+						)}
+					</div>
+				))}
+			</nav>
+			<a
+				href={accountPage}
+				class="mt-auto inline-flex items-center justify-between gap-4 text-sm uppercase tracking-[0.35em] text-foam/80 hover:text-gold"
+			>
+				<span>Mon compte</span>
+				<span aria-hidden="true" class="text-base text-foam/40">&rarr;</span>
+			</a>
+		</div>
 	</div>
 
 	<label
@@ -302,6 +311,7 @@ const menuItems = [
 
 	<script type="module" is:inline>
 		const drawerToggle = document.getElementById('ahd-drawer-toggle');
+		const drawer = document.getElementById('ahd-drawer');
 		const drawerLinks = document.querySelectorAll('#ahd-drawer a');
 		const menuButton = document.getElementById('ahd-menu-button');
 		const accountToggle = document.getElementById('ahd-account-toggle');
@@ -315,6 +325,7 @@ const menuItems = [
 		const docEl = document.documentElement;
 		const accountPageUrl = ${JSON.stringify(accountPage)};
 		const accountStorageKey = 'ahd-account-active';
+		
 		const getStorage = () => {
 			try {
 				return window.localStorage;
@@ -322,6 +333,24 @@ const menuItems = [
 				return null;
 			}
 		};
+
+		// Gérer l'expansion du drawer au survol du sous-menu
+		const menuGroups = document.querySelectorAll('[role="group"]');
+		
+		menuGroups.forEach((group) => {
+			const hasSubmenu = Boolean(group.querySelector('.submenu-panel'));
+			if (!hasSubmenu) return;
+			group.addEventListener('mouseenter', () => {
+				if (drawer && drawerToggle?.checked) {
+					drawer.classList.add('submenu-active');
+				}
+			});
+			group.addEventListener('mouseleave', () => {
+				if (drawer) {
+					drawer.classList.remove('submenu-active');
+				}
+			});
+		});
 
 		if (drawerToggle && menuButton) {
 			menuButton.setAttribute('aria-expanded', String(drawerToggle.checked));
@@ -358,6 +387,9 @@ const menuItems = [
 				drawerToggle.checked = false;
 				if (menuButton) {
 					menuButton.setAttribute('aria-expanded', 'false');
+				}
+				if (drawer) {
+					drawer.classList.remove('submenu-active');
 				}
 			};
 

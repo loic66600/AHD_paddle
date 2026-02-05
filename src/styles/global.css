@@ -488,3 +488,10 @@ html.drawer-open #ahd-drawer {
 	scrollbar-width: thin;
 	scrollbar-color: rgba(2, 6, 23, 0.25) transparent;
 }
+
+/* Drawer expansion for submenu */
+@media (min-width: 1024px) {
+	#ahd-drawer.submenu-active {
+		width: 42rem;
+	}
+}
