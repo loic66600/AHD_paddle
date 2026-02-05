@@ -32,14 +32,12 @@ const heroVideo = withBase('/media/ahd-hero.mp4');
       L’esprit AHD transposé sur l’eau.
     </h1>
     <div class="mt-10 flex flex-col sm:flex-row gap-4">
-      <p-button
-        variant="secondary"
-        size="large"
-        class="hero-cta"
-        style="--p-button-color: #ffffff !important; --p-button-background-color: rgba(255,255,255,0.16) !important; --p-button-border-color: #ffffff !important; --p-button-hover-background-color: rgba(255,255,255,0.26) !important; --p-button-hover-color: #ffffff !important; --p-button-hover-border-color: #ffffff !important;"
+      <a
+        href={withBase('/#gamme')}
+        class="inline-flex items-center justify-center rounded-2xl border border-white px-8 py-4 text-sm font-semibold uppercase tracking-[0.25em] text-white hover:bg-white/15 transition"
       >
         {ctaLabel}
-      </p-button>
+      </a>
     </div>
   </div>
 </section>
