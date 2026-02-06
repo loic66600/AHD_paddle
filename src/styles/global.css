@@ -495,3 +495,130 @@ html.drawer-open #ahd-drawer {
 		width: 42rem;
 	}
 }
+/* ===== SNIPCART BUTTON STYLING ===== */
+/* Primary button (Paiement/Checkout) - ALL variants */
+.snipcart-button-primary,
+.snipcart__btn--primary,
+button.snipcart-button-primary {
+	background: #2563eb !important;
+	background-color: #2563eb !important;
+	border: none !important;
+	border-color: #2563eb !important;
+	color: white !important;
+	opacity: 1 !important;
+	font-weight: 600 !important;
+	padding: 0.875rem 1.5rem !important;
+	border-radius: 0.75rem !important;
+	transition: all 0.2s ease !important;
+	min-height: 44px !important;
+}
+
+/* Hover state */
+.snipcart-button-primary:hover,
+.snipcart__btn--primary:hover,
+button.snipcart-button-primary:hover {
+	background: #1d4ed8 !important;
+	background-color: #1d4ed8 !important;
+	border-color: #1d4ed8 !important;
+	opacity: 1 !important;
+	transform: scale(1.02) !important;
+	box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+}
+
+.snipcart-button-primary:active,
+button.snipcart-button-primary:active {
+	transform: scale(0.98) !important;
+}
+
+/* Label inside button */
+.snipcart-button-primary .snipcart-base-button__label,
+.snipcart-button-primary .snipcart-base-button__label span {
+	color: white !important;
+	font-weight: 600 !important;
+}
+
+/* Secondary buttons */
+.snipcart__btn--secondary,
+button.snipcart-button-secondary {
+	opacity: 1 !important;
+	background-color: #f3f4f6 !important;
+	color: #1f2937 !important;
+	border-color: #e5e7eb !important;
+}
+
+.snipcart__btn--secondary:hover,
+button.snipcart-button-secondary:hover {
+	background-color: #e5e7eb !important;
+	border-color: #d1d5db !important;
+}
+
+/* Panier modal */
+.snipcart-modal {
+	background-color: white !important;
+}
+
+.snipcart-modal__header {
+	background-color: #f9fafb !important;
+	border-bottom: 1px solid #e5e7eb !important;
+}
+
+.snipcart-checkout-button {
+	background-color: #2563eb !important;
+	color: white !important;
+	opacity: 1 !important;
+}
+
+/* ===== CONTINUER VOS ACHATS BUTTON ===== */
+/* Bouton flottant dans modal panier */
+.snipcart-modal .snipcart__cart-header {
+	position: relative;
+	display: flex !important;
+	align-items: center !important;
+	gap: 1rem !important;
+}
+
+/* Lien "Continuer" injecté via JS */
+.snipcart-continue-shopping {
+	background: none !important;
+	color: #047857 !important;
+	padding: 0 !important;
+	margin: 0 0 12px 0 !important;
+	border-radius: 0 !important;
+	font-size: 16px !important;
+	font-weight: 700 !important;
+	cursor: pointer !important;
+	text-decoration: underline !important;
+	text-underline-offset: 3px !important;
+	border: none !important;
+	white-space: nowrap !important;
+	display: inline-block !important;
+	box-shadow: none !important;
+	transition: color 0.2s ease !important;
+	z-index: 10 !important;
+	flex-shrink: 0 !important;
+	order: -1 !important;
+	margin-right: auto !important;
+}
+
+.snipcart-continue-shopping:hover {
+	background: none !important;
+	color: #059669 !important;
+	transform: none !important;
+	box-shadow: none !important;
+	text-decoration: underline !important;
+}
+
+.snipcart-continue-shopping:active {
+	transform: none !important;
+	color: #10b981 !important;
+}
+
+/* Supprimer le pseudo-élément ancien */
+.snipcart-modal .snipcart__cart-header::before {
+	content: none !important;
+	display: none !important;
+}
+
+.snipcart-checkout-button:hover {
+	background-color: #1d4ed8 !important;
+}

@@ -443,7 +443,9 @@ const finalShapeItems = shapeItems.length ? shapeItems : shapeFallback;
         if (window.Snipcart && window.Snipcart.store) {
           try {
             const cart = window.Snipcart.store.getState().cart.items;
-            totalItems = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+            if (Array.isArray(cart)) {
+              totalItems = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+            }
           } catch (error) {
             console.error('Error getting cart items:', error);
           }
@@ -469,7 +471,7 @@ const finalShapeItems = shapeItems.length ? shapeItems : shapeFallback;
       if (window.Snipcart && window.Snipcart.store) {
         const cart = window.Snipcart.store.getState().cart.items;
         const badge = document.getElementById('cart-badge');
-        if (badge) {
+        if (badge && Array.isArray(cart)) {
           badge.textContent = cart.length;
           badge.style.display = cart.length > 0 ? 'flex' : 'none';
         }

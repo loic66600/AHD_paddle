@@ -266,88 +266,7 @@ const apiKey = import.meta.env.PUBLIC_SNIPCART_API_KEY;
         document.addEventListener('snipcart.ready', () => {
           console.log('🛒 Snipcart ready, customizing...');
           
-          // Ajouter le lien "Continuer mes achats" dans le panier
-          const addContinueShoppingLink = () => {
-            // Supprimer l'ancien lien s'il existe
-            const oldLink = document.getElementById('custom-continue-shopping');
-            if (oldLink) oldLink.remove();
-
-            // Chercher plusieurs emplacements possibles dans le panier
-            const cartSummary = document.querySelector('.snipcart-cart-summary');
-            const cartFooter = document.querySelector('.snipcart-cart-summary__footer');
-            const cartContent = document.querySelector('.snipcart__box--badge-highlight');
-            const checkoutBtn = document.querySelector('.snipcart-checkout');
-            
-            const targetElement = cartFooter || cartSummary || cartContent || checkoutBtn?.parentElement;
-            
-            if (targetElement) {
-              const continueLink = document.createElement('a');
-              continueLink.id = 'custom-continue-shopping';
-              continueLink.href = '#';
-              continueLink.textContent = '← Continuer mes achats';
-              continueLink.style.cssText = `
-                display: block;
-                text-align: center;
-                margin: 1rem auto 0.5rem;
-                padding: 0.875rem 1.5rem;
-                color: #1a1a1a;
-                text-decoration: none;
-                font-size: 0.9rem;
-                font-weight: 600;
-                border: 2px solid #e5e7eb;
-                border-radius: 0.75rem;
-                transition: all 0.2s;
-                background: white;
-                max-width: 300px;
-              `;
-              continueLink.addEventListener('mouseenter', () => {
-                continueLink.style.borderColor = '#1a1a1a';
-                continueLink.style.backgroundColor = '#f9fafb';
-              });
-              continueLink.addEventListener('mouseleave', () => {
-                continueLink.style.borderColor = '#e5e7eb';
-                continueLink.style.backgroundColor = 'white';
-              });
-              continueLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (window.Snipcart && window.Snipcart.api && window.Snipcart.api.theme && window.Snipcart.api.theme.cart) {
-                  window.Snipcart.api.theme.cart.close();
-                }
-                console.log('✅ Cart closed');
-              });
-              
-              targetElement.appendChild(continueLink);
-              console.log('✅ Continue shopping link added to:', targetElement.className);
-            } else {
-              console.log('⚠️ Could not find suitable target element for continue shopping link');
-            }
-          };
-
-          // Observer pour détecter l'ouverture du panier
-          window.Snipcart.events.on('cart.opened', () => {
-            console.log('🛒 Cart opened, adding link...');
-            // Essayer plusieurs fois car le DOM du panier met du temps à se construire
-            setTimeout(addContinueShoppingLink, 100);
-            setTimeout(addContinueShoppingLink, 500);
-            setTimeout(addContinueShoppingLink, 1000);
-          });
-
-          // Observer les changements DOM dans le panier
-          const observeCart = () => {
-            const cartContainer = document.querySelector('#snipcart');
-            if (cartContainer) {
-              const observer = new MutationObserver((mutations) => {
-                const cartVisible = document.querySelector('.snipcart-modal--opened, .snipcart-cart');
-                if (cartVisible && !document.getElementById('custom-continue-shopping')) {
-                  setTimeout(addContinueShoppingLink, 300);
-                }
-              });
-              observer.observe(cartContainer, { childList: true, subtree: true });
-              console.log('✅ Cart observer set up');
-            }
-          };
-
-          setTimeout(observeCart, 1000);
+          // (Lien panier géré plus bas via .snipcart-continue-shopping)
         });
       };
 
@@ -356,6 +275,101 @@ const apiKey = import.meta.env.PUBLIC_SNIPCART_API_KEY;
         document.addEventListener('DOMContentLoaded', customizeSnipcart);
       } else {
         customizeSnipcart();
+      }
+
+      // Force button color styling
+      const forceButtonColors = () => {
+        const paymentButton = document.querySelector('button.snipcart-button-primary, button[class*="snipcart-button-primary"]');
+        if (paymentButton) {
+          paymentButton.style.backgroundColor = '#2563eb';
+          paymentButton.style.color = 'white';
+          paymentButton.style.border = 'none';
+          paymentButton.style.fontWeight = '600';
+          console.log('✅ Payment button colored');
+        }
+      };
+
+      // Rendre le lien "Continuer vos achats" fixe et toujours présent
+      const makeContinueShoppingClickable = () => {
+        const existing = document.querySelector('.snipcart-continue-shopping');
+
+        // Cibler en priorité le footer des actions (près du bouton paiement)
+        const target = document.querySelector(
+          '.snipcart-cart__footer-buttons, .snipcart-cart__footer, .snipcart-modal__footer, .snipcart__footer'
+        );
+
+        if (!target) {
+          return;
+        }
+
+        let continueLink = existing;
+        if (!continueLink) {
+          continueLink = document.createElement('a');
+          continueLink.className = 'snipcart-continue-shopping';
+          continueLink.href = '#';
+          continueLink.textContent = '← Continuer mes achats';
+
+          continueLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (window.Snipcart && window.Snipcart.api && window.Snipcart.api.theme && window.Snipcart.api.theme.cart) {
+              window.Snipcart.api.theme.cart.close();
+            }
+          });
+        }
+
+        // Forcer l'insertion en bas à gauche du bloc d'actions
+        if (continueLink.parentElement !== target) {
+          target.insertBefore(continueLink, target.firstChild);
+        }
+      };
+
+      // Réinjection permanente avec check plus fréquent
+      const ensureContinueShoppingVisible = () => {
+        const isCartOpen = document.querySelector('.snipcart-modal-open, .snipcart-modal, .snipcart-cart');
+        if (isCartOpen) {
+          makeContinueShoppingClickable();
+        }
+      };
+
+      // Écouter l'ouverture du panier et rendre le bouton cliquable
+      window.Snipcart?.events?.on('cart.opened', () => {
+        console.log('🛒 Cart opened event fired');
+        setTimeout(makeContinueShoppingClickable, 100);
+        setTimeout(makeContinueShoppingClickable, 300);
+        setTimeout(makeContinueShoppingClickable, 500);
+        setTimeout(forceButtonColors, 100);
+        setTimeout(forceButtonColors, 300);
+        setTimeout(forceButtonColors, 500);
+      });
+
+      // Observer pour détecter l'ouverture du panier et appliquer styles
+      const setupCartObserver = () => {
+        const observer = new MutationObserver(() => {
+          const isCartOpen = document.querySelector('.snipcart-modal-open, .snipcart-modal, .snipcart-cart');
+          if (isCartOpen && !document.querySelector('.snipcart-continue-shopping')) {
+            ensureContinueShoppingVisible();
+          }
+        });
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+        console.log('✅ Cart observer set up');
+      };
+
+      // Tenter l'injection dès que Snipcart est prêt
+      document.addEventListener('snipcart.ready', () => {
+        setTimeout(makeContinueShoppingClickable, 200);
+        setTimeout(setupCartObserver, 300);
+        // Vérifier moins souvent pour réduire les logs (toutes les 2 secondes)
+        setInterval(ensureContinueShoppingVisible, 2000);
+      });
+
+      // Vérifier aussi au chargement du document
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          setTimeout(setupCartObserver, 500);
+        });
+      } else {
+        setTimeout(setupCartObserver, 500);
       }
     </script>
 
