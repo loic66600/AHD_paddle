@@ -289,6 +289,27 @@ const apiKey = import.meta.env.PUBLIC_SNIPCART_API_KEY;
         }
       };
 
+      // Assombrir la nav quand le panier Snipcart est ouvert
+      const setCartNavDark = (enabled) => {
+        const nav = document.getElementById('ahd-global-nav');
+        if (!nav) {
+          return;
+        }
+        if (enabled) {
+          nav.classList.add('nav-dark');
+          nav.classList.remove('nav-light');
+          nav.style.setProperty('--nav-bg', 'rgba(1, 1, 4, 0.65)');
+          nav.style.setProperty('--nav-border', 'rgba(255, 255, 255, 0.15)');
+          nav.style.setProperty('--nav-foreground', 'rgba(255, 255, 255, 0.92)');
+          nav.style.setProperty('--nav-hover', '#ffffff');
+        } else {
+          nav.style.removeProperty('--nav-bg');
+          nav.style.removeProperty('--nav-border');
+          nav.style.removeProperty('--nav-foreground');
+          nav.style.removeProperty('--nav-hover');
+        }
+      };
+
       // Rendre le lien "Continuer vos achats" fixe et toujours présent
       const makeContinueShoppingClickable = () => {
         const existing = document.querySelector('.snipcart-continue-shopping');
@@ -361,7 +382,49 @@ const apiKey = import.meta.env.PUBLIC_SNIPCART_API_KEY;
         setTimeout(setupCartObserver, 300);
         // Vérifier moins souvent pour réduire les logs (toutes les 2 secondes)
         setInterval(ensureContinueShoppingVisible, 2000);
+
+        // Assombrir la nav si le panier est déjà ouvert
+        if (document.documentElement.classList.contains('snipcart-modal-open')) {
+          setCartNavDark(true);
+        }
       });
+
+      // Snipcart open/close events
+      window.Snipcart?.events?.on('cart.opened', () => {
+        setCartNavDark(true);
+      });
+      window.Snipcart?.events?.on('cart.closed', () => {
+        // Laisser la page panier gérer le thème si besoin
+        setCartNavDark(false);
+      });
+
+      // Observer la classe sur html (fallback)
+      const navStateObserver = new MutationObserver(() => {
+        const isOpen = document.documentElement.classList.contains('snipcart-modal-open');
+        if (isOpen) {
+          setCartNavDark(true);
+        }
+      });
+      navStateObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+      // Détection via hash (#/cart) si Snipcart n'applique pas de classe
+      const checkCartHash = () => {
+        const hash = window.location.hash || '';
+        const isCartHash = hash.includes('/cart');
+        const isAccountPage = window.location.pathname.includes('/compte');
+
+        if (isCartHash) {
+          setCartNavDark(true);
+          return;
+        }
+
+        // Si on quitte le panier, revenir à la nav normale (sauf page compte)
+        if (!isAccountPage) {
+          setCartNavDark(false);
+        }
+      };
+      window.addEventListener('hashchange', checkCartHash);
+      setTimeout(checkCartHash, 100);
 
       // Vérifier aussi au chargement du document
       if (document.readyState === 'loading') {

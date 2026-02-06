@@ -220,14 +220,30 @@ import { withBase } from '../utils/url';
     </div>
 
     <script type="module" is:inline>
-      const nav = document.getElementById('ahd-global-nav');
-      if (nav) {
+      const applyCartNavTheme = () => {
+        const nav = document.getElementById('ahd-global-nav');
+        if (!nav) {
+          return false;
+        }
         nav.classList.add('nav-dark');
         nav.classList.remove('nav-light');
-        nav.style.setProperty('--nav-bg', 'rgba(1, 1, 4, 1)');
-        nav.style.setProperty('--nav-border', 'rgba(255, 255, 255, 0.25)');
+        nav.style.setProperty('--nav-bg', 'rgba(0, 0, 0, 0.98)');
+        nav.style.setProperty('--nav-border', 'rgba(255, 255, 255, 0.18)');
         nav.style.setProperty('--nav-foreground', 'rgba(255, 255, 255, 1)');
         nav.style.setProperty('--nav-hover', '#ffffff');
+        return true;
+      };
+
+      // Appliquer immédiatement si possible
+      if (!applyCartNavTheme()) {
+        // Sinon réessayer après chargement et quelques cycles
+        document.addEventListener('DOMContentLoaded', applyCartNavTheme, { once: true });
+        const navRetry = setInterval(() => {
+          if (applyCartNavTheme()) {
+            clearInterval(navRetry);
+          }
+        }, 200);
+        setTimeout(() => clearInterval(navRetry), 3000);
       }
 
       // Affichage dynamique du panier
@@ -323,5 +339,6 @@ import { withBase } from '../utils/url';
         }
       }, 1000);
     </script>
+
   </main>
 </Layout>

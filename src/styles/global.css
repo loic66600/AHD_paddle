@@ -622,3 +622,11 @@ button.snipcart-button-secondary:hover {
 .snipcart-checkout-button:hover {
 	background-color: #1d4ed8 !important;
 }
+
+/* ===== NAV BAR ASSOMBRIE QUAND LE PANIER SNIPCART EST OUVERT ===== */
+html.snipcart-modal-open #ahd-global-nav {
+	--nav-bg: rgba(1, 1, 4, 0.65) !important;
+	--nav-border: rgba(255, 255, 255, 0.15) !important;
+	--nav-foreground: rgba(255, 255, 255, 0.92) !important;
+	--nav-hover: #ffffff !important;
+}
