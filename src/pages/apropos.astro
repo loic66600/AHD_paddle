@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { withBase } from '../utils/url';
+import HistoryTimeline from '../components/home/HistoryTimeline.astro';
 ---
 
 <Layout title="AHD Paddle | À propos">
@@ -16,85 +17,78 @@ import { withBase } from '../utils/url';
           </p>
         </div>
 
-        <!-- Contenu principal -->
-        <div class="space-y-12">
-          <!-- Section histoire -->
-          <div class="rounded-[2.5rem] border border-midnight/10 bg-white/70 p-8 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
-            <h2 class="text-2xl font-semibold mb-4">Nos origines</h2>
-            <div class="space-y-4 text-midnight/80 leading-relaxed">
-              <p>
-                AHD a été fondée en 1990 par Christophe Piaget, un passionné de windsurf qui voyait une opportunité d'appliquer les technologies aéronautiques aux sports nautiques. La vision était simple : créer des planches de haut niveau qui allient performance, durabilité et innovation.
+      </div>
+
+      <!-- Timeline pleine largeur (alignée au container de la section) -->
+      <div class="mt-12">
+        <HistoryTimeline />
+      </div>
+
+      <!-- Contenu principal sous la timeline -->
+      <div class="mx-auto mt-12 flex w-full max-w-4xl flex-col gap-12">
+        <!-- Section valeurs -->
+        <div class="space-y-6">
+          <h2 class="text-2xl font-semibold">Nos valeurs</h2>
+          <div class="grid gap-6 md:grid-cols-3">
+            <div class="rounded-2xl border border-midnight/10 bg-slate-50 p-6">
+              <h3 class="font-semibold text-midnight mb-3 text-lg">Innovation</h3>
+              <p class="text-sm text-midnight/70">
+                L'innovation est au cœur de notre ADN. Nous investissons continuellement dans la recherche et développement pour repousser les limites de la performance.
               </p>
-              <p>
-                Depuis la Suisse jusqu'à la Bretagne, nos ateliers ont fabriqué des générations de riders. Aujourd'hui, AHD est devenue une référence incontournable pour les amateurs de windsurf, wingfoil et foil qui recherchent l'excellence.
+            </div>
+            <div class="rounded-2xl border border-midnight/10 bg-slate-50 p-6">
+              <h3 class="font-semibold text-midnight mb-3 text-lg">Qualité</h3>
+              <p class="text-sm text-midnight/70">
+                Chaque planche est fabriquée avec soin dans nos ateliers. Nous utilisons les meilleurs matériaux et techniques de construction pour garantir la durabilité.
+              </p>
+            </div>
+            <div class="rounded-2xl border border-midnight/10 bg-slate-50 p-6">
+              <h3 class="font-semibold text-midnight mb-3 text-lg">Communauté</h3>
+              <p class="text-sm text-midnight/70">
+                Nous croyons en la force de la communauté des riders. Nos programmes et événements créent des liens durables entre passionnés du monde entier.
               </p>
             </div>
           </div>
+        </div>
 
-          <!-- Section valeurs -->
-          <div class="space-y-6">
-            <h2 class="text-2xl font-semibold">Nos valeurs</h2>
-            <div class="grid gap-6 md:grid-cols-3">
-              <div class="rounded-2xl border border-midnight/10 bg-slate-50 p-6">
-                <h3 class="font-semibold text-midnight mb-3 text-lg">Innovation</h3>
-                <p class="text-sm text-midnight/70">
-                  L'innovation est au cœur de notre ADN. Nous investissons continuellement dans la recherche et développement pour repousser les limites de la performance.
-                </p>
-              </div>
-              <div class="rounded-2xl border border-midnight/10 bg-slate-50 p-6">
-                <h3 class="font-semibold text-midnight mb-3 text-lg">Qualité</h3>
-                <p class="text-sm text-midnight/70">
-                  Chaque planche est fabriquée avec soin dans nos ateliers. Nous utilisons les meilleurs matériaux et techniques de construction pour garantir la durabilité.
-                </p>
-              </div>
-              <div class="rounded-2xl border border-midnight/10 bg-slate-50 p-6">
-                <h3 class="font-semibold text-midnight mb-3 text-lg">Communauté</h3>
-                <p class="text-sm text-midnight/70">
-                  Nous croyons en la force de la communauté des riders. Nos programmes et événements créent des liens durables entre passionnés du monde entier.
-                </p>
-              </div>
-            </div>
-          </div>
+        <!-- Section équipe -->
+        <div class="rounded-[2.5rem] border border-midnight/10 bg-white/70 p-8 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
+          <h2 class="text-2xl font-semibold mb-4">Notre équipe</h2>
+          <p class="text-midnight/80 leading-relaxed">
+            L'équipe AHD est composée de designers passionnés, d'ingénieurs hydrodynamiciens et de craftspeople dédiés. Nous travaillons ensemble pour créer des produits qui inspirent et performent. Nos bureaux sont situés en Vendée, où nous sommes au cœur de la culture nautique européenne.
+          </p>
+        </div>
 
-          <!-- Section équipe -->
-          <div class="rounded-[2.5rem] border border-midnight/10 bg-white/70 p-8 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
-            <h2 class="text-2xl font-semibold mb-4">Notre équipe</h2>
-            <p class="text-midnight/80 leading-relaxed">
-              L'équipe AHD est composée de designers passionnés, d'ingénieurs hydrodynamiciens et de craftspeople dédiés. Nous travaillons ensemble pour créer des produits qui inspirent et performent. Nos bureaux sont situés en Vendée, où nous sommes au cœur de la culture nautique européenne.
+        <!-- Section engagement environnemental -->
+        <div class="rounded-[2.5rem] border border-midnight/10 bg-white/70 p-8 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
+          <h2 class="text-2xl font-semibold mb-4">Notre engagement environnemental</h2>
+          <div class="space-y-4 text-midnight/80 leading-relaxed">
+            <p>
+              Nous reconnaissons notre responsabilité envers l'environnement et les océans qui nous permettent de prospérer. AHD s'engage à réduire son impact écologique à travers :
             </p>
+            <ul class="list-disc list-inside space-y-2 ml-2">
+              <li>L'utilisation de matériaux durables et recyclables</li>
+              <li>La réduction des émissions de carbone dans nos processus de fabrication</li>
+              <li>La participation à des initiatives de conservation marine</li>
+              <li>L'éducation de notre communauté sur la protection des océans</li>
+            </ul>
           </div>
+        </div>
 
-          <!-- Section engagement environnemental -->
-          <div class="rounded-[2.5rem] border border-midnight/10 bg-white/70 p-8 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
-            <h2 class="text-2xl font-semibold mb-4">Notre engagement environnemental</h2>
-            <div class="space-y-4 text-midnight/80 leading-relaxed">
-              <p>
-                Nous reconnaissons notre responsabilité envers l'environnement et les océans qui nous permettent de prospérer. AHD s'engage à réduire son impact écologique à travers :
-              </p>
-              <ul class="list-disc list-inside space-y-2 ml-2">
-                <li>L'utilisation de matériaux durables et recyclables</li>
-                <li>La réduction des émissions de carbone dans nos processus de fabrication</li>
-                <li>La participation à des initiatives de conservation marine</li>
-                <li>L'éducation de notre communauté sur la protection des océans</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- CTA -->
-          <div class="flex flex-wrap items-center justify-center gap-3 pt-4">
-            <a
-              href={withBase('/')}
-              class="rounded-full border border-midnight/20 px-6 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-midnight/70 transition hover:border-midnight hover:text-midnight"
-            >
-              Retour à l'accueil
-            </a>
-            <a
-              href={withBase('/panier')}
-              class="rounded-full bg-midnight px-6 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-white transition hover:bg-midnight/80"
-            >
-              Explorer la collection
-            </a>
-          </div>
+        <!-- CTA -->
+        <div class="flex flex-wrap items-center justify-center gap-3 pt-4">
+          <a
+            href={withBase('/')}
+            class="rounded-full border border-midnight/20 px-6 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-midnight/70 transition hover:border-midnight hover:text-midnight"
+          >
+            Retour à l'accueil
+          </a>
+          <a
+            href={withBase('/panier')}
+            class="rounded-full bg-midnight px-6 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-white transition hover:bg-midnight/80"
+          >
+            Explorer la collection
+          </a>
         </div>
       </div>
     </section>

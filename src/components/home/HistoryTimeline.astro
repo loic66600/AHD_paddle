@@ -1,0 +1,317 @@
+---
+// HistoryTimeline.astro - Vertical centered timeline with surfboard descending
+import { withBase } from '../../utils/url';
+---
+
+<div class="relative w-full py-20 overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white">
+  <div class="w-full px-2 md:px-4">
+    <!-- Central vertical line (invisible) -->
+    <div class="absolute left-1/2 top-0 bottom-0 w-1 bg-midnight/0 transform -translate-x-1/2 hidden md:block"></div>
+    
+    <!-- Surfboard that moves between timeline items -->
+    <div id="surfboard-container" class="fixed left-1/2 top-1/2 z-30 hidden md:block pointer-events-none transition-all duration-500 ease-out" style="transform: translate(-50%, -50%);">
+      <img 
+        id="surfboard" 
+        src={withBase('/images/surfboard.png')}
+        alt="Surfboard"
+        class="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-lg transition-all duration-500"
+        style="transform: rotateZ(0deg);"
+      />
+    </div>
+
+    <!-- Timeline Items (alternating left/right) -->
+    <div class="space-y-20 md:space-y-32 relative" id="timeline-container">
+      
+      <!-- 1987 - LEFT -->
+      <div class="timeline-item grid md:grid-cols-2 gap-8 md:gap-16 items-center opacity-0 transition-all duration-700" data-year="1987" data-side="left">
+        <!-- Content LEFT -->
+        <div class="md:text-right md:pr-16 order-1">
+          <span class="text-2xl font-bold text-midnight/80 block mb-2">1987</span>
+          <h3 class="text-xl font-semibold text-midnight mb-3">Les débuts en Australie</h3>
+          <p class="text-midnight/70 text-sm leading-relaxed mb-4">
+            AHD voit le jour en Australie sous l'impulsion de Harry Germann et du rider Tom Luedecke. Dès ses débuts, la marque s'impose sur les spots iconiques, notamment la Columbia River Gorge.
+          </p>
+          <div class="mt-4">
+            <div class="rounded-lg overflow-hidden border-2 border-midnight/20 shadow-lg bg-slate-200 h-56 md:h-64">
+              <img src={withBase('/images/story_ahd/1987.png')} alt="AHD 1987" class="w-full h-full object-cover" onerror="this.style.display='none'">
+            </div>
+          </div>
+        </div>
+        <!-- Empty right side with dot -->
+        <div class="order-2 hidden md:block relative">
+          <div class="absolute left-0 top-0 w-4 h-4 bg-midnight rounded-full -translate-x-1/2 border-4 border-white shadow-md"></div>
+        </div>
+      </div>
+
+      <!-- 1990 - RIGHT -->
+      <div class="timeline-item grid md:grid-cols-2 gap-8 md:gap-16 items-center opacity-0 transition-all duration-700" data-year="1990" data-side="right">
+        <!-- Empty left side with dot -->
+        <div class="order-1 hidden md:block relative">
+          <div class="absolute right-0 top-0 w-4 h-4 bg-midnight rounded-full translate-x-1/2 border-4 border-white shadow-md"></div>
+        </div>
+        <!-- Content RIGHT -->
+        <div class="md:pl-16 order-2">
+          <span class="text-2xl font-bold text-midnight/80 block mb-2">1990</span>
+          <h3 class="text-xl font-semibold text-midnight mb-3">Arrivée en Suisse</h3>
+          <p class="text-midnight/70 text-sm leading-relaxed mb-4">
+            Christophe Piaget rachète la marque, rapatrie les moules et installe une usine de production à Collombey en Suisse. AHD introduit alors les premiers flotteurs sandwich de série.
+          </p>
+          <div class="mt-4">
+            <div class="rounded-lg overflow-hidden border-2 border-midnight/20 shadow-lg bg-slate-200 h-56 md:h-64">
+              <img src={withBase('/images/story_ahd/1990.png')} alt="AHD 1990" class="w-full h-full object-cover" onerror="this.style.display='none'">
+              
+            </div>
+          </div>
+        </div>        <div class="order-2 hidden md:block relative">
+          <div class="absolute left-0 top-0 w-4 h-4 bg-midnight rounded-full -translate-x-1/2 border-4 border-white shadow-md"></div>
+        </div>      </div>
+
+      <!-- 1993 - LEFT -->
+      <div class="timeline-item grid md:grid-cols-2 gap-8 md:gap-16 items-center opacity-0 transition-all duration-700" data-year="1993" data-side="left">
+        <div class="md:text-right md:pr-16 order-1">
+          <span class="text-2xl font-bold text-midnight/80 block mb-2">1993</span>
+          <h3 class="text-xl font-semibold text-midnight mb-3">Victoire avec la 288</h3>
+          <p class="text-midnight/70 text-sm leading-relaxed mb-4">
+            Sébastien Carle s'impose au championnat du monde sur la nouvelle AHD 288, confirmant l'avance technologique de la marque.
+          </p>
+          <div class="mt-4">
+            <div class="rounded-lg overflow-hidden border-2 border-midnight/20 shadow-lg bg-slate-200 h-56 md:h-64">
+              <img src={withBase('/images/story_ahd/1993.png')} alt="AHD 1993" class="w-full h-full object-cover" onerror="this.style.display='none'">
+              
+            </div>
+          </div>
+        </div>
+        <div class="order-2 hidden md:block relative">
+          <div class="absolute left-0 top-0 w-4 h-4 bg-midnight rounded-full -translate-x-1/2 border-4 border-white shadow-md"></div>
+        </div>
+      </div>
+
+      <!-- 1996 - RIGHT -->
+      <div class="timeline-item grid md:grid-cols-2 gap-8 md:gap-16 items-center opacity-0 transition-all duration-700" data-year="1996" data-side="right">
+        <div class="order-1 hidden md:block relative">
+          <div class="absolute right-0 top-0 w-4 h-4 bg-midnight rounded-full translate-x-1/2 border-4 border-white shadow-md"></div>
+        </div>
+        <div class="md:pl-16 order-2">
+          <span class="text-2xl font-bold text-midnight/80 block mb-2">1996</span>
+          <h3 class="text-xl font-semibold text-midnight mb-3">L'ère bretonne</h3>
+          <p class="text-midnight/70 text-sm leading-relaxed mb-4">
+            Arrivée du duo breton Patrice Belbeoch et Jean-Marie Guiriec. Ensemble, ils créent la Convertible 267, icône du shape wave/slalom.
+          </p>
+          <div class="mt-4">
+            <div class="rounded-lg overflow-hidden border-2 border-midnight/20 shadow-lg bg-slate-200 h-56 md:h-64">
+              <img src={withBase('/images/story_ahd/1997.png')} alt="AHD 1996" class="w-full h-full object-cover" onerror="this.style.display='none'">
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1997-1998 - LEFT -->
+      <div class="timeline-item grid md:grid-cols-2 gap-8 md:gap-16 items-center opacity-0 transition-all duration-700" data-year="1997" data-side="left">
+        <div class="md:text-right md:pr-16 order-1">
+          <span class="text-2xl font-bold text-midnight/80 block mb-2">1997-1998</span>
+          <h3 class="text-xl font-semibold text-midnight mb-3">Domination et innovations</h3>
+          <p class="text-midnight/70 text-sm leading-relaxed mb-4">
+            Antoine Albeau rejoint l'équipe. Bruno André intègre la R&D. AHD multiplie les innovations : Diamond, Maxxride, planches NT.
+          </p>
+          <div class="mt-4">
+            <div class="rounded-lg overflow-hidden border-2 border-midnight/20 shadow-lg bg-slate-200 h-56 md:h-64">
+              <img src={withBase('/images/story_ahd/1998.png')} alt="AHD 1998" class="w-full h-full object-cover" onerror="this.style.display='none'">
+              
+            </div>
+          </div>
+        </div>
+        <div class="order-2 hidden md:block relative">
+          <div class="absolute left-0 top-0 w-4 h-4 bg-midnight rounded-full -translate-x-1/2 border-4 border-white shadow-md"></div>
+        </div>
+      </div>
+
+      <!-- 2006 - RIGHT -->
+      <div class="timeline-item grid md:grid-cols-2 gap-8 md:gap-16 items-center opacity-0 transition-all duration-700" data-year="2006" data-side="right">
+        <div class="order-1 hidden md:block relative">
+          <div class="absolute right-0 top-0 w-4 h-4 bg-midnight rounded-full translate-x-1/2 border-4 border-white shadow-md"></div>
+        </div>
+        <div class="md:pl-16 order-2">
+          <span class="text-2xl font-bold text-midnight/80 block mb-2">2006</span>
+          <h3 class="text-xl font-semibold text-midnight mb-3">La Seal révolutionne</h3>
+          <p class="text-midnight/70 text-sm leading-relaxed mb-4">
+            Lancement de la Seal : compacte, radicale et pensée pour le lightwind. Une révolution dans le wave riding moderne.
+          </p>
+          <div class="mt-4">
+            <div class="rounded-lg overflow-hidden border-2 border-midnight/20 shadow-lg bg-slate-200 h-56 md:h-64">
+              <img src={withBase('/images/story_ahd/2006.png')} alt="AHD 2006" class="w-full h-full object-cover" onerror="this.style.display='none'">
+              
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 2007-2009 - RIGHT -->
+      <div class="timeline-item grid md:grid-cols-2 gap-8 md:gap-16 items-center opacity-0 transition-all duration-700" data-year="2007" data-side="left">
+        <div class="md:text-right md:pr-16 order-1">
+          <span class="text-2xl font-bold text-midnight/80 block mb-2">2007-2009</span>
+          <h3 class="text-xl font-semibold text-midnight mb-3">Naissance du foil moderne</h3>
+          <p class="text-midnight/70 text-sm leading-relaxed mb-4">
+            Fondation de Tridenn (2007). Premier combo flotteur/foil carbone AFS-1 (2009) : point de départ du windfoil moderne.
+          </p>
+          <div class="mt-4">
+            <div class="rounded-lg overflow-hidden border-2 border-midnight/20 shadow-lg bg-slate-200 h-56 md:h-64">
+              <img src={withBase('/images/story_ahd/2007.png')} alt="AHD 2009" class="w-full h-full object-cover" onerror="this.style.display='none'">
+              
+            </div>
+          </div>
+        </div>        <div class="order-2 hidden md:block relative">
+          <div class="absolute left-0 top-0 w-4 h-4 bg-midnight rounded-full -translate-x-1/2 border-4 border-white shadow-md"></div>
+        </div>      </div>
+
+      <!-- 2010 - LEFT -->
+      <div class="timeline-item grid md:grid-cols-2 gap-8 md:gap-16 items-center opacity-0 transition-all duration-700" data-year="2010" data-side="right">
+        <div class="order-1 hidden md:block relative">
+          <div class="absolute right-0 top-0 w-4 h-4 bg-midnight rounded-full translate-x-1/2 border-4 border-white shadow-md"></div>
+        </div>
+        <div class="md:pl-16 order-2">
+          <span class="text-2xl font-bold text-midnight/80 block mb-2">2010</span>
+          <h3 class="text-xl font-semibold text-midnight mb-3">Ère polyvalente</h3>
+          <p class="text-midnight/70 text-sm leading-relaxed mb-4">
+            Lancement du Sealion : flotteur polyvalent révolutionnaire pour windsurf, surfsailing, SUP foil et windfoil.
+          </p>
+          <div class="mt-4">
+            <div class="rounded-lg overflow-hidden border-2 border-midnight/20 shadow-lg bg-slate-200 h-56 md:h-64">
+              <img src={withBase('/images/story_ahd/2010.png')} alt="AHD 2010" class="w-full h-full object-cover" onerror="this.style.display='none'">
+              
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Aujourd'hui - RIGHT -->
+      <div class="timeline-item grid md:grid-cols-2 gap-8 md:gap-16 items-center opacity-0 transition-all duration-700" data-year="now" data-side="left">
+        <div class="md:text-right md:pr-16 order-1">
+          <span class="text-2xl font-bold text-midnight/80 block mb-2">Aujourd'hui</span>
+          <h3 class="text-xl font-semibold text-midnight mb-3">Une histoire d'excellence</h3>
+          <p class="text-midnight/70 text-sm leading-relaxed">
+            Plus de 30 ans d'innovation dans le windsurf, SUP foil, wing foil et windfoil. Fabrication européenne d'excellence.
+          </p>
+        </div>
+        <div class="order-2 hidden md:block relative">
+          <div class="absolute left-0 top-0 w-4 h-4 bg-midnight rounded-full -translate-x-1/2 border-4 border-white shadow-md"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // Surfboard movement and rotation + timeline item fade-in
+  const surfboardContainer = document.getElementById('surfboard-container');
+  const surfboard = document.getElementById('surfboard');
+  const timelineContainer = document.getElementById('timeline-container');
+  const timelineItems = document.querySelectorAll('.timeline-item');
+
+  function updateAnimations() {
+    if (!timelineContainer || !surfboardContainer) return;
+
+    // Find the item closest to center of viewport
+    let closestItem = null;
+    let closestDistance = Infinity;
+
+    timelineItems.forEach((item) => {
+      const rect = item.getBoundingClientRect();
+      const itemCenter = rect.top + rect.height / 2;
+      const viewportCenter = window.innerHeight / 2;
+      const distance = Math.abs(itemCenter - viewportCenter);
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestItem = item;
+      }
+    });
+
+    // Move and rotate surfboard to closest item
+    if (closestItem) {
+      const rect = closestItem.getBoundingClientRect();
+      const itemCenter = rect.top + rect.height / 2;
+      const side = closestItem.getAttribute('data-side');
+      
+      // Calculate vertical movement
+      const viewportCenter = window.innerHeight / 2;
+      const offsetY = itemCenter - viewportCenter;
+      
+      // Calculate horizontal movement (left or right based on side)
+      // Moves very slightly toward the text but stays centered
+      const offsetX = side === 'left' ? -window.innerWidth * 0.08 : window.innerWidth * 0.08;
+      
+      // Calculate rotation based on side (left = -15deg, right = 15deg)
+      const rotation = side === 'left' ? -15 : 15;
+      
+      // Apply transform to container
+      surfboardContainer.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px))`;
+      
+      // Apply rotation to image
+      surfboard.style.transform = `rotateZ(${rotation}deg)`;
+    }
+
+    // Fade in timeline items as they come into view
+    timelineItems.forEach((item) => {
+      const rect = item.getBoundingClientRect();
+      const itemCenter = rect.top + rect.height / 2;
+      const viewportCenter = window.innerHeight / 2;
+      
+      // Distance from center (normalized)
+      const distance = Math.abs(itemCenter - viewportCenter) / viewportCenter;
+      
+      // Fade in when close to center
+      if (distance < 1) {
+        const opacity = Math.max(0, 1 - distance);
+        item.style.opacity = opacity;
+        
+        // Slide-in effect
+        const side = item.getAttribute('data-side');
+        const translateX = (1 - opacity) * (side === 'left' ? -50 : 50);
+        item.style.transform = `translateX(${translateX}px)`;
+      } else {
+        item.style.opacity = '0';
+      }
+    });
+  }
+
+  // Smooth scroll animation
+  window.addEventListener('scroll', updateAnimations, { passive: true });
+  window.addEventListener('resize', updateAnimations, { passive: true });
+  
+  // Initial call
+  updateAnimations();
+</script>
+
+<style>
+  .timeline-item {
+    will-change: opacity, transform;
+  }
+
+  @media (min-width: 768px) {
+    .timeline-item {
+      column-gap: 10rem;
+    }
+
+    .timeline-item[data-side="left"] > div:first-child {
+      padding-right: 10rem;
+    }
+
+    .timeline-item[data-side="right"] > div:last-child {
+      padding-left: 10rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    #surfboard-container {
+      display: none !important;
+    }
+    .timeline-item {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>
